@@ -1,0 +1,2 @@
+(regulate|adjust|tune) (?P<Item>.*) (to) (?P<TempValue>\d*) (degrees)
+(increase|decrease) (?P<Item>.*) (by) (?P<TempValue>\d*) (degrees)

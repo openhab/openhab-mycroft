@@ -84,6 +84,7 @@ Each item tag supports different command, here is the summary:
  | Switchable			| turn		 	| 	on, off				|
  |						| switch	 	|	on, off				|
  |						| put		 	|	on, off				|
+ | 						| what's		|	status				|
  |						|				|						|
  | Lighting				| turn		 	| 	on, off				|
  |						| switch	 	|	on, off				|
@@ -111,6 +112,7 @@ With references to the above item definitions, here are an examples of working c
 - *"Hey Mycroft, turn on Diningroom Light"*
 - *"Hey Mycroft, switch off Kitchen Light"*
 - *"Hey Mycroft, put on Good Night"*
+- *"Hey Mycroft, what is Good Night status?"*
 - *"Hey Mycroft, set Diningroom to 50 percent"*
 - *"Hey Mycroft, dim Kitchen"*
 - *"Hey Mycroft, brighten Kitchen"*

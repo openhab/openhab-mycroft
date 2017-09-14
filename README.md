@@ -8,6 +8,7 @@ Some sample voice commands are:
 - *"Hey Mycroft, turn on Diningroom Light"*
 - *"Hey Mycroft, switch off Kitchen Light"*
 - *"Hey Mycroft, put on Good Night"*
+- *"Hey Mycroft, what is Good Night status?"*
 - *"Hey Mycroft, set Diningroom to 50 percent"*
 - *"Hey Mycroft, dim Kitchen"*
 - *"Hey Mycroft, brighten Kitchen"*
@@ -47,6 +48,7 @@ If items are modified in openHAB, a refresh in Mycroft is needed by the command:
 - *"Hey Mycroft, refresh openhab items"*
 
 ## Versions Change Log
+* 1.1 added status request to Switchable items
 * 1.0 added support to item tagged as Thermostat, CurrentTemperature, CurrentHumidity
 * 0.9 added dimming command to item tagged as Lighting
 * 0.8 supports only Lighting and Switchable tags, commands ON and OFF

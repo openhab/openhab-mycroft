@@ -25,6 +25,8 @@ import json
 # v 0.8 - merged lighting and switchable intent in onoff intent
 # v 0.9 - added support to dimmable items
 # v 1.0 - added Thermostat tag support
+# v 1.1 - added what status Switchable tag
+
 
 __author__ = 'mortommy'
 
@@ -233,6 +235,10 @@ class openHABSkill(MycroftSkill):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
+		elif(requestType == "status"):
+			infoType = "status"
+			unitOfMeasure = ""
+			self.currStatusItemsDic.update(self.switchableItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
 		

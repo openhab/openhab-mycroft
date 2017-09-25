@@ -1,28 +1,25 @@
-# openHAB skill for Mycroft
+# Mycroft AI Skill
 
-[Mycroft](https://mycroft.ai/) is the world’s first open source assistant. The skill allows you to connect a running Mycroft 
-instance (Mark 1, picroft, etc.) to your openHab. The skill takes advantage of the openHAB REST API, so it works both with the 
-v1.x and v2.x, and no openHab upgrade is required. 
+[Mycroft AI](https://mycroft.ai/) is the world’s first open source voice enabled assistant.
+The skill allows you to connect a running Mycroft instance to your openHAB system.
+Supported natural voice commands and responses can freely be modified and extended.
 
-The skill is supported for English (U.S.), English (U.K.) languages. 
+The skill currently supportes the English (U.S.) and English (U.K.) languages but new languages are easily added via configuration files.
 
 ## General Configuration Instructions
 
 ### Requirements
 
-* [A running instance of Mycroft](https://mycroft.ai/get-mycroft/)
-* A running instance of openHAB
-* openHAB must be reacheable from the Mycroft instance 
+- A running [instance of Mycroft](https://mycroft.ai/get-mycroft/) (Mark 1, picroft, ...)
+- A running instance of openHAB (version 1.x or v2.x)
+- openHAB must be reacheable from the Mycroft instance
 
 ### Skill Installation
 
-The openHAB skill has to be installed on you Mycroft instance, please refer to the [official documentation](https://docs.mycroft.ai/skills.and.features/adding.skills) 
-about how to install a skill. 
+The openHAB skill has to be installed on your Mycroft instance, please refer to the [official documentation](https://docs.mycroft.ai/skills.and.features/adding.skills) to learn how to install a skill. 
 
-Clone the [repository](https://github.com/openhab/openhab-mycroft.git) into your `~/.mycroft/skills` directory.
-Then install the dependencies inside your mycroft virtual environment:
-
-If on picroft just skip the workon part and the directory will be `/opt/mycroft/skills`
+Clone the [skill repository](https://github.com/openhab/openhab-mycroft.git) into the Mycroft skills directory,
+then trigger installation of needed dependencies:
 
 ```shell
 cd ~/.mycroft/skills
@@ -32,9 +29,11 @@ cd skill-openhab
 pip install -r requirements.txt
 ```
 
+If on [picroft](https://docs.mycroft.ai/development/installation/raspberry.pi), use the skills directory `/opt/mycroft/skills` and skip the `workon mycroft` command.
+
 ### Skill Configuration
 
-Add the block below to your `mycoft.conf` file:
+Add the block below to your `mycroft.conf` file:
 
 ```json
  "openHABSkill": {
@@ -47,8 +46,8 @@ Restart mycroft for the changes to take effect.
 
 ### openHAB Item Configuration
 
-Items are exposed to openHAB skill for Mycroft through the use of tags which follow the [HomeKit](http://docs.openhab.org/addons/io/homekit/readme.html) binding tagging syntax.
-Pleas see the [HomeKit item configuration](http://docs.openhab.org/addons/io/homekit/readme.html#item-configuration) page for information on how to tag items.
+Items are exposed to openHAB skill for Mycroft through the use of tags.
+See the [Hue Emulation](http://docs.openhab.org/addons/io/hueemulation/readme.html) and [HomeKit Add-on](http://docs.openhab.org/addons/io/homekit/readme.html) documentation for details about tagging and available tags.
 
 * **Items via .items - File**
 
@@ -57,23 +56,42 @@ Pleas see the [HomeKit item configuration](http://docs.openhab.org/addons/io/hom
   Some examples of tagged items are:
   
   ```java
-  Color DiningroomLight "Diningroom Light" <light> (gKitchen) [ "Lighting" ] {channel="hue:0200:1:bloom1:color"}
-  Color KitchenLight "Kitchen Light" <light> (gKitchen) [ "Lighting" ] {channel="hue:0200:1:bloom1:color"}
-  Switch GoodNight "Good Night"	[ "Switchable" ]	
+  Color KitchenLight "Kitchen Light" <light> (gKitchen) ["Lighting"] {channel="hue:0200:1:bloom1:color"}
+  Color DiningroomLight "Diningroom Light" <light> (gKitchen) ["Lighting"] {channel="hue:0200:1:bloom1:color"}
+  Switch GoodNight "Good Night"	["Switchable"]	
 
-  Number MqttID1Temperature "Bedroom Temperature" <temperature> [ "CurrentTemperature" ] {mqtt="<[mosquitto:mysensors/SI/1/1/1/0/0:state:default]"}
-  Number MqttID1Humidity "Bedroom Humidity" [ "CurrentHumidity" ] {mqtt="<[mosquitto:mysensors/SI/1/0/1/0/1:state:default]"}
+  Number MqttID1Temperature "Bedroom Temperature" <temperature> ["CurrentTemperature"] {mqtt="<[mosquitto:mysensors/SI/1/1/1/0/0:state:default]"}
+  Number MqttID1Humidity "Bedroom Humidity" ["CurrentHumidity"] {mqtt="<[mosquitto:mysensors/SI/1/0/1/0/1:state:default]"}
 
-  Group gThermostat "Main Thermostat" [ "gMainThermostat" ]
-  Number MainThermostatCurrentTemp "Main Thermostat Current Temperature" (gMainThermostat) [ "CurrentTemperature" ]
-  Number MainThermostatTargetTemperature "Main Thermostat Target Temperature" (gMainThermostat) [ "TargetTemperature" ]
-  String MainThermostatHeatingCoolingMode "Main Thermostat Heating/Cooling Mode" (gMainThermostat) [ "homekit:HeatingCoolingMode" ]
+  Group gThermostat "Main Thermostat" ["gMainThermostat"]
+  Number MainThermostatCurrentTemp "Main Thermostat Current Temperature" (gMainThermostat) ["CurrentTemperature"]
+  Number MainThermostatTargetTemperature "Main Thermostat Target Temperature" (gMainThermostat) ["TargetTemperature"]
+  String MainThermostatHeatingCoolingMode "Main Thermostat Heating/Cooling Mode" (gMainThermostat) ["homekit:HeatingCoolingMode"]
   ```
  
-If items are modified in openHAB, a refresh in Mycroft is needed by the command:
+If items are modified in openHAB, a refresh in Mycroft is needed by the voice command:
 
-- *"Hey Mycroft, refresh openhab items"*
-  
+- *"Hey Mycroft, refresh openHAB Items"*
+
+#### Item Label Recommendation
+
+Matching of voice commands to Items happens based on the Item label (e.g. "Kitchen Light").
+It is therefore advisable, to choose labels that can be used to form natural commands.
+As an example, compare "Hey Mycroft, turn on the *Kitchen Light*" vs. "Hey Mycroft, turn on the *Ground Floor LEDs Kitchen*".
+
+In combination with the Mycroft skill (and other similar services) you are thereby tempted to break with your naming scheme and introduce confusion into your setup.
+openHAB Tip: You may define multiple Items bound to one channel.
+Instead of manipulating the label of one single Item, you can define multiple Items specifically for voice commands.
+See the following example:
+
+```java
+// Common/main Item bound to a binding channel
+Switch Kitchen_Light    "Ground Floor LEDs Kitchen" <light> (gKitchen) {channel="..."}
+// Two Items with labels fitting for voice commands, bound to the same binding channel
+Switch Kitchen_Light_A  "Kitchen Light"                   ["Lighting"] {channel="..."}
+Switch Kitchen_Light_A2 "Kitchen LEDs"                    ["Lighting"] {channel="..."}
+```
+
 ### Example Voice Commands
 
 Each item tag supports different command, here is the summary:

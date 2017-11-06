@@ -45,12 +45,10 @@ String MainThermostatHeatingCoolingMode "Main Thermostat Heating/Cooling Mode" (
 
 If items are modified in openHAB, a refresh in Mycroft is needed by the command:
 
-- *"Hey Mycroft, refresh openhab items"* or
-- *"Hey Mycroft, refresh open hab items"*
+- *"Hey Mycroft, refresh openhab items"*
 
 If you've forgotten what items have been identified, you can ask Mycroft:
-- *"Hey Mycroft, list openhab items"* or
-- *"Hey Mycroft, list open hab itmes"*
+- *"Hey Mycroft, list openhab items"*
 
 ## Versions Change Log
 * 1.1 added status request to Switchable items

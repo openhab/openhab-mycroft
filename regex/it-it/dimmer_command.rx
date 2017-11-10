@@ -1,0 +1,2 @@
+(imppsta) (?P<Item>.*) (a) (?P<BrigthPercentage>\d*)(?: percento)?
+(smorza|illumina) (?P<Item>.*?)\s*(?: by )?(?P<BrigthPercentage>\d*)?(?: percento)?$

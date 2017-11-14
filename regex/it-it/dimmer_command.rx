@@ -1,2 +1,2 @@
-(imppsta) (?P<Item>.*) (al) (?P<BrigthPercentage>\d*)(?: percento)?
+(imposta) (?P<Item>.*) (al) (?P<BrigthPercentage>\d*)(?: percento)?
 (abbassa|alza) (?P<Item>.*?)\s*(?: del )?(?P<BrigthPercentage>\d*)?(?: percento)?$

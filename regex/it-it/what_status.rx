@@ -1,0 +1,1 @@
+(qual è) (?P<Item>.*) (?P<RequestType> lo stato|la temperatura|l'umidità|messo a|regolato a|affinato a)

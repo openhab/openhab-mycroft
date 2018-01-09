@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 ### Configuration
 
-Add the block below to your `mycoft.conf` file:
+Add the block below to your `mycroft.conf` file:
 
 ```json
  "openHABSkill": {

@@ -1,0 +1,1 @@
+(imposta|accendi|metti) (?P<Command> su on|off) (?P<Item>.*)

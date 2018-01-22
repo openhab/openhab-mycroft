@@ -65,7 +65,7 @@ If on picroft just skip the workon part and the directory will be `/opt/mycroft/
 
 ```shell
 cd ~/.mycroft/skills
-git clone https://github.com/mortommy/mycroft-skill-openhab skill-openhab
+git clone https://github.com/openhab/openhab-mycroft.git skill-openhab
 workon mycroft
 cd skill-openhab
 pip install -r requirements.txt
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 ### Configuration
 
-Add the block below to your `mycoft.conf` file:
+Add the block below to your `mycroft.conf` file:
 
 ```json
  "openHABSkill": {

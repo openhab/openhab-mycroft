@@ -54,6 +54,12 @@ class openHABSkill(MycroftSkill):
 		self.getTaggedItems()
 
 	def initialize(self):
+	
+		supported_languages = ["en-us", "it-it"]
+		
+		if self.lang not in supported_languages:
+			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
+			self.shutdown()
 
 		refresh_tagged_items_intent = IntentBuilder("RefreshTaggedItemsIntent").require("RefreshTaggedItemsKeyword").build()
 		self.register_intent(refresh_tagged_items_intent, self.handle_refresh_tagged_items_intent)
@@ -195,7 +201,7 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.lightingItemsDic, messageItem)
 
 		if ohItem != None:
-			if (command == "set"):
+			if ((command == "set") or (command == "imposta")):
 				if ((int(brightValue) < 0) or (int(brightValue) > 100)):
 					self.speak_dialog('ErrorDialog')
 				else:
@@ -211,7 +217,7 @@ class openHABSkill(MycroftSkill):
 					if(brightValue == None):
 						brightValue = "10"
 
-					if (command == "dim"):
+					if ((command == "dim") or (command == "abbassa")):
 						newBrightValue = curBright-(int(brightValue))
 					else:
 						newBrightValue = curBright+(int(brightValue))
@@ -244,18 +250,26 @@ class openHABSkill(MycroftSkill):
 	def	handle_what_status_intent(self, message):
 		messageItem = message.data.get('Item')
 		requestType = message.data.get('RequestType')
+		
 		unitOfMeasure = "degree"
 		infoType = "temperature"
+		
+		if self.lang == "it-it"
+			unitOfMeasure = "gradi"
+			infoType = "temperatura"
 
 		self.currStatusItemsDic = dict()
 
-		if(requestType == "temperature"):
+		if((requestType == "temperature") or (requestType == "la temperatura")):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
-		elif(requestType == "humidity"):
+		elif((requestType == "humidity")  or (requestType == "l'umidità")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
+			if self.lang == "it-it"
+				unitOfMeasure = "percento"
+				infoType = "umidità"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
-		elif(requestType == "status"):
+		elif((requestType == "status") or (requestType == "lo stato")):
 			infoType = "status"
 			unitOfMeasure = ""
 			self.currStatusItemsDic.update(self.switchableItemsDic)
@@ -282,13 +296,13 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.targetTemperatureItemsDic, messageItem)
 
 		if ohItem != None:
-			if((command == "regulate") or (command == "adjust") or (command == "tune")):
+			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti")):
 				statusCode = self.sendCommandToItem(ohItem, tempVal)
 				newTempValue = tempVal
 			else:
 				state = self.getCurrentItemStatus(ohItem)
 				if ((state != None) and (state.isdigit())):
-					if (command == "increase"):
+					if ((command == "increase") or (command == "incrementa")):
 						newTempValue = int(state)+(int(tempVal))
 					else:
 						newTempValue = int(state)-(int(tempVal))

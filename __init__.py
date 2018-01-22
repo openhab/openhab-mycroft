@@ -1,4 +1,5 @@
 # Copyright (c) 2010-2017 by the respective copyright holders.
+# -*- coding: iso-8859-15 -*-
 
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Eclipse Public License v1.0
@@ -254,7 +255,7 @@ class openHABSkill(MycroftSkill):
 		unitOfMeasure = "degree"
 		infoType = "temperature"
 		
-		if self.lang == "it-it"
+		if (self.lang == "it-it"):
 			unitOfMeasure = "gradi"
 			infoType = "temperatura"
 
@@ -265,7 +266,7 @@ class openHABSkill(MycroftSkill):
 		elif((requestType == "humidity")  or (requestType == "l'umidità")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
-			if self.lang == "it-it"
+			(if self.lang == "it-it"):
 				unitOfMeasure = "percento"
 				infoType = "umidità"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)

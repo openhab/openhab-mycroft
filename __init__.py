@@ -266,7 +266,7 @@ class openHABSkill(MycroftSkill):
 		elif((requestType == "humidity")  or (requestType == "l'umidità")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
-			(if self.lang == "it-it"):
+			if (self.lang == "it-it"):
 				unitOfMeasure = "percento"
 				infoType = "umidità"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)

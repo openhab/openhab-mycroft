@@ -144,7 +144,7 @@ class openHABSkill(MycroftSkill):
 		if len(itemsDict) == 0:
 			return ""
 		else:
-			return "%s: %s" % (typeStr, ', '.join(list(itemsDict.keys())))
+			return "%s: %s" % (typeStr, ', '.join(list(itemsDict.values())))
 
 	def handle_list_items_intent(self, message):
 		msg = self.getItemsFromDict("Lights", self.lightingItemsDic) + "\n"

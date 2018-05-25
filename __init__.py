@@ -129,7 +129,7 @@ class openHABSkill(MycroftSkill):
 		bestItem = None
 
 		try:
-			for itemName, itemLabel in itemDictionary.items():
+			for itemName, itemLabel in list(itemDictionary.items()):
 				score = fuzz.ratio(messageItem, itemLabel)
 				if score > bestScore:
 					bestScore = score

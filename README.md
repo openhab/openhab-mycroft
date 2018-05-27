@@ -24,7 +24,7 @@ Some sample voice commands are:
 
 ## openHAB Item Configuration
 
-In order to make openHAB Items accessible to Mycroft, they need to be [tagged](http://docs.openhab.org/addons/io/homekit/readme.html).
+In order to make openHAB Items accessible to Mycroft, they need to be [tagged](https://www.openhab.org/addons/integrations/homekit/).
 Device names recognized by Mycroft are matched against openHAB Item Labels.
 
 The above examples would all work with the following set of openHAB Item definitons:

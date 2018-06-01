@@ -66,7 +66,7 @@ class openHABSkill(MycroftSkill):
 		onoff_status_intent = IntentBuilder("OnOff_StatusIntent").require("OnOffStatusKeyword").require("Command").require("Item").build()
 		self.register_intent(onoff_status_intent, self.handle_onoff_status_intent)
 
-		dimmer_status_intent = IntentBuilder("Dimmer_StatusIntent").require("DimmerStatusKeyword").require("Item").optionally("BrigthPercentage").build()
+		dimmer_status_intent = IntentBuilder("Dimmer_StatusIntent").require("DimmerStatusKeyword").require("Item").optionally("DimmerPercentage").build()
 		self.register_intent(dimmer_status_intent, self.handle_dimmer_status_intent)
 
 		what_status_intent = IntentBuilder("What_StatusIntent").require("WhatStatusKeyword").require("Item").require("RequestType").build()
@@ -192,7 +192,7 @@ class openHABSkill(MycroftSkill):
 	def handle_dimmer_status_intent(self, message):
 		command = message.data.get('DimmerStatusKeyword')
 		messageItem = message.data.get('Item')
-		brightValue = message.data.get('BrigthPercentage', None)
+		brightValue = message.data.get('DimmerPercentage', None)
 
 		statusCode = 0
 		newBrightValue = 0

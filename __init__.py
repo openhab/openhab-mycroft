@@ -48,9 +48,7 @@ class openHABSkill(MycroftSkill):
 		self.switchableItemsDic = dict()
 		self.currentTempItemsDic = dict()
 		self.currentHumItemsDic = dict()
-		#self.currentThermostatItemsDic = dict()
 		self.targetTemperatureItemsDic = dict()
-		#self.homekitHeatingCoolingModeDic = dict()
 
 		self.getTaggedItems()
 

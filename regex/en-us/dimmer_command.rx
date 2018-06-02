@@ -1,2 +1,1 @@
-(set) (?P<Item>.*) (to) (?P<DimmerPercentage>\d*)(?: percent)?
-(dim|brigh) (?P<Item>.*?)\s*(?: by )?(?P<DimmerPercentage>\d*)?(?: percent)?$
+(set) (?P<Item>.*) (to) (?P<DimmerPercentage>\d+)(?: percent)?

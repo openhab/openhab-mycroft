@@ -1,0 +1,6 @@
+{
+    "sftp.protocol": "sftp",
+    "sftp.host": "192.168.254.77",
+    "sftp.username": "pi",
+    "sftp.remotePath": "/opt/mycroft/skills/openhab-mycroft"
+}

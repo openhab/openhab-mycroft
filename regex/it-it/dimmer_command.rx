@@ -1,2 +1,0 @@
-(imposta) (?P<Item>.*) (al) (?P<DimmerPercentage>\d*)(?: percento)?
-(abbassa|alza) (?P<Item>.*?)\s*(?: del )?(?P<DimmerPercentage>\d*)?(?: percento)?$

@@ -29,11 +29,10 @@ class openHABSkill(MycroftSkill):
         self.command_headers = {"Content-type": "text/plain"}
         self.polling_headers = {"Accept": "application/json"}
 
-        self._clearItems()
-        self._getTaggedItems()
+        self._clear_items()
+        self._get_items()
 
     def initialize(self):
-
         supported_languages = ["en-us"]
 
         if self.lang not in supported_languages:
@@ -55,34 +54,38 @@ class openHABSkill(MycroftSkill):
         intent = IntentBuilder("ListItemsIntent").require("ListItemsKeyword").build()
         self.register_intent(intent, self.intent_list_items)
 
+    def stop(self):
+        pass
+	
+    # Intent handlers
     def intent_list_items(self, message):
         self.speak_dialog("ListItems", {
             "type": "Lighting",
-            "items": self._getItemsFromDict(self.items["Lighting"])
+            "items": self._print_item_dict(self.items["Lighting"])
         })
 
         self.speak_dialog("ListItems", {
             "type": "Switchable",
-            "items": self._getItemsFromDict(self.items["Switchable"])
+            "items": self._print_item_dict(self.items["Switchable"])
         })
 
         self.speak_dialog("ListItems", {
             "type": "CurrentTemperature",
-            "items": self._getItemsFromDict(self.items["CurrentTemperature"])
+            "items": self._print_item_dict(self.items["CurrentTemperature"])
         })
 
         self.speak_dialog("ListItems", {
             "type": "CurrentHumidity",
-            "items": self._getItemsFromDict(self.items["CurrentHumidity"])
+            "items": self._print_item_dict(self.items["CurrentHumidity"])
         })
 
         self.speak_dialog("ListItems", {
             "type": "Thermostat",
-            "items": self._getItemsFromDict(self.items["Thermostat"])
+            "items": self._print_item_dict(self.items["Thermostat"])
         })
 
     def intent_refresh_items(self, message):
-        self._getTaggedItems()
+        self._get_items()
 
         self.speak_dialog('RefreshItems', {
             'light_count': str(len(self.items["Lighting"])),
@@ -101,13 +104,13 @@ class openHABSkill(MycroftSkill):
         items.update(self.items["Lighting"])
         items.update(self.items["Switchable"])
 
-        item = self._findItemName(items, messageItem)
+        item = self._find_item_by_name(items, messageItem)
 
         if item != None:
             if (command != "on") and (command != "off"):
                 self.speak_dialog('ErrorDialog')
             else:
-                statusCode = self._sendCommandToItem(item, command.upper())
+                statusCode = self._send_item_command(item, command.upper())
 
                 if statusCode == 200:
                     self.speak_dialog('SetItem')
@@ -129,7 +132,7 @@ class openHABSkill(MycroftSkill):
         items = dict()
         items.update(self.items["Lighting"])
 
-        item = self._findItemName(items, messageItem)
+        item = self._find_item_by_name(items, messageItem)
 
         if item != None:
             if (value == None):
@@ -137,7 +140,7 @@ class openHABSkill(MycroftSkill):
             elif ((int(value) < 0) or (int(value) > 100)):
                 self.speak_dialog('ErrorDialog')
             else:
-                statusCode = self._sendCommandToItem(item, value)
+                statusCode = self._send_item_command(item, value)
 
                 if statusCode == 200:
                     self.speak_dialog('SetItem')
@@ -159,57 +162,37 @@ class openHABSkill(MycroftSkill):
             items.update(self.items["Lighting"])
             items.update(self.items["Switchable"])
 
-            item = self._findItemName(items, messageItem)
-            state = self.getCurrentItemStatus(item)
+            item = self._find_item_by_name(items, messageItem)
+            state = self._get_item_state(item)
 
             self.speak_dialog('StatusOnOff', {'item': messageItem, 'state': state})
         elif (requestType == "set to"):
             items = dict()
             items.update(self.items["Lighting"])
 
-            item = self._findItemName(items, messageItem)
-            state = self.getCurrentItemStatus(item)
+            item = self._find_item_by_name(items, messageItem)
+            state = self._get_item_state(item)
 
             self.speak_dialog('StatusDimmer', {'item': messageItem, 'state': state})
         elif (requestType == "temp"):
             items = dict()
             items.update(self.items["CurrentTemperature"])
 
-            item = self._findItemName(items, messageItem)
-            state = self.getCurrentItemStatus(item)
+            item = self._find_item_by_name(items, messageItem)
+            state = self._get_item_state(item)
 
             self.speak_dialog('StatusTemperature', {'item': messageItem, 'state': state})
         elif (requestType == "humidity"):
             items = dict()
             items.update(self.items["CurrentHumidity"])
 
-            item = self._findItemName(items, messageItem)
-            state = self.getCurrentItemStatus(item)
+            item = self._find_item_by_name(items, messageItem)
+            state = self._get_item_state(item)
 
             self.speak_dialog('StatusHumidity', {'item': messageItem, 'state': state})
 
-    def getCurrentItemStatus(self, ohItem):
-        requestUrl = self.url+"/items/%s/state" % (ohItem)
-        state = None
-
-        try:
-            req = requests.get(requestUrl, headers=self.command_headers)
-
-            if req.status_code == 200:
-                state = req.text
-            else:
-                LOGGER.error("Some issues with the command execution!")
-                self.speak_dialog('CommunicationError')
-
-        except KeyError:
-            pass
-
-        return state
-
-    def stop(self):
-        pass
-	
-    def _clearItems(self):
+    # Item dictionary manipulation
+    def _clear_items(self):
         self.items = {
             "Lighting": {},
             "Switchable": {},
@@ -217,9 +200,33 @@ class openHABSkill(MycroftSkill):
             "CurrentHumidity": {},
             "Thermostat": {}
         }
-    
-    def _getTaggedItems(self):
-        self._clearItems()
+
+    def _find_item_by_name(self, itemDictionary, messageItem):
+
+        bestScore = 0
+        score = 0
+        bestItem = None
+
+        try:
+            for itemName, itemLabel in list(itemDictionary.items()):
+                score = fuzz.ratio(messageItem, itemLabel)
+                if score > bestScore:
+                    bestScore = score
+                    bestItem = itemName
+        except KeyError:
+            pass
+
+        return bestItem
+
+    def _print_item_dict(self, itemsDict):
+        if len(itemsDict) == 0:
+            return "nothing"
+        else:
+            return "%s" % (', '.join(list(itemsDict.values())))
+
+    # OpenHAB communication
+    def _get_items(self):
+        self._clear_items()
 
         requestUrl = self.url+"/items?recursive=false"
 
@@ -249,34 +256,29 @@ class openHABSkill(MycroftSkill):
         else:
             self.speak_dialog('GetItemsListError')
 
-    def _findItemName(self, itemDictionary, messageItem):
-
-        bestScore = 0
-        score = 0
-        bestItem = None
-
-        try:
-            for itemName, itemLabel in list(itemDictionary.items()):
-                score = fuzz.ratio(messageItem, itemLabel)
-                if score > bestScore:
-                    bestScore = score
-                    bestItem = itemName
-        except KeyError:
-            pass
-
-        return bestItem
-
-    def _getItemsFromDict(self, itemsDict):
-        if len(itemsDict) == 0:
-            return "nothing"
-        else:
-            return "%s" % (', '.join(list(itemsDict.values())))
-
-    def _sendCommandToItem(self, ohItem, command):
+    def _send_item_command(self, ohItem, command):
         requestUrl = self.url+"/items/%s" % (ohItem)
         req = requests.post(requestUrl, data=command, headers=self.command_headers)
 
         return req.status_code
+
+    def _get_item_state(self, ohItem):
+        requestUrl = self.url+"/items/%s/state" % (ohItem)
+        state = None
+
+        try:
+            req = requests.get(requestUrl, headers=self.command_headers)
+
+            if req.status_code == 200:
+                state = req.text
+            else:
+                LOGGER.error("Some issues with the command execution!")
+                self.speak_dialog('CommunicationError')
+
+        except KeyError:
+            pass
+
+        return state
 
 def create_skill():
     return openHABSkill()

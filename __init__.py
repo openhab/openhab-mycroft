@@ -50,10 +50,7 @@ class openHABSkill(MycroftSkill):
         self.register_intent(intent, self.intent_dimmer)
 
         intent = IntentBuilder("What_StatusIntent").require("WhatStatusKeyword").require("Item").require("RequestType").build()
-        self.register_intent(intent, self.handle_what_status_intent)
-
-        intent = IntentBuilder("SetTemp_StatusIntent").require("ThermostatStatusKeyword").require("Item").require("TempValue").build()
-        self.register_intent(intent, self.handle_setTemp_status_intent)
+        self.register_intent(intent, self.intent_status)
 
         intent = IntentBuilder("ListItemsIntent").require("ListItemsKeyword").build()
         self.register_intent(intent, self.intent_list_items)
@@ -153,20 +150,9 @@ class openHABSkill(MycroftSkill):
         else:
             self.speak_dialog('ItemNotFoundError')
 
-    def handle_what_status_intent(self, message):
+    def intent_status(self, message):
         messageItem = message.data.get('Item')
         requestType = message.data.get('RequestType')
-
-        # Status needs switchable, lighting, and thermostat items only
-        # items = dict()
-        # items.update(self.items["Lighting"])
-        # items.update(self.items["Switchable"])
-        # items.update(self.items["CurrentTemperature"])
-        # items.update(self.items["CurrentHumidity"])
-
-        # item = self._findItemName(items, messageItem)
-
-        # state = self.getCurrentItemStatus(item)
 
         if (requestType == "status"):
             items = dict()
@@ -201,48 +187,6 @@ class openHABSkill(MycroftSkill):
             state = self.getCurrentItemStatus(item)
 
             self.speak_dialog('StatusHumidity', {'item': messageItem, 'state': state})
-
-    def handle_setTemp_status_intent(self, message):
-        command = message.data.get('ThermostatStatusKeyword')
-        messageItem = message.data.get('Item')
-        tempVal = message.data.get('TempValue')
-
-        statusCode = 0
-        newTempValue = 0
-
-        ohItem = self._findItemName(self.targetTemperatureItemsDic, messageItem)
-
-        if ohItem != None:
-            if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti")):
-                statusCode = self._sendCommandToItem(ohItem, tempVal)
-                newTempValue = tempVal
-            else:
-                state = self.getCurrentItemStatus(ohItem)
-                if ((state != None) and (state.isdigit())):
-                    if ((command == "increase") or (command == "incrementa")):
-                        newTempValue = int(state)+(int(tempVal))
-                    else:
-                        newTempValue = int(state)-(int(tempVal))
-
-                    statusCode = self._sendCommandToItem(
-                        ohItem, str(newTempValue))
-                else:
-                    pass
-
-            if statusCode == 200:
-                self.speak_dialog('ThermostatStatus', {
-                                  'item': messageItem, 'temp_val': str(newTempValue)})
-            elif statusCode == 404:
-                LOGGER.error(
-                    "Some issues with the command execution!. Item not found")
-                self.speak_dialog('ItemNotFoundError')
-            else:
-                LOGGER.error("Some issues with the command execution!")
-                self.speak_dialog('CommunicationError')
-
-        else:
-            LOGGER.error("Item not found!")
-            self.speak_dialog('ItemNotFoundError')
 
     def getCurrentItemStatus(self, ohItem):
         requestUrl = self.url+"/items/%s/state" % (ohItem)

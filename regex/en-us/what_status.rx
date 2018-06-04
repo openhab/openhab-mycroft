@@ -1,1 +1,1 @@
-(what is|what's) (?P<Item>.*) (?P<RequestType>status|temp|humidity|set to)
+(what is|what's) (?P<Item>.*) (?P<RequestType>status|temperature|humidity|set to)

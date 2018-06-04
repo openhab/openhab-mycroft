@@ -1,2 +1,0 @@
-(regola|aggiusta|metti) (?P<Item>.*) (a) (?P<TempValue>\d*) (gradi)
-(incrementa|decrementa) (?P<Item>.*) (di) (?P<TempValue>\d*) (gradi)

@@ -1,1 +1,1 @@
-(turn|switch|put) (?P<Command>on|off) (?P<Item>.*)
+(turn) (?P<Command>on|off) (?P<Item>.*)

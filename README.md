@@ -51,6 +51,7 @@ If you've forgotten what items have been identified, you can ask Mycroft:
 - *"Hey Mycroft, list openhab items"*
 
 ## Versions Change Log
+* 1.2 addedd python 3 support
 * 1.1 added status request to Switchable items
 * 1.0 added support to item tagged as Thermostat, CurrentTemperature, CurrentHumidity
 * 0.9 added dimming command to item tagged as Lighting
@@ -58,6 +59,15 @@ If you've forgotten what items have been identified, you can ask Mycroft:
 
 ## Installation
 
+From 18.2.5b mycroft-core release it is possible to install the skill using the voice command:
+- *"Hey Mycroft, install openhab"*
+
+or via the [msm](https://mycroft.ai/documentation/msm/) command:
+```shell
+msm install openhab
+```
+
+To manually install the skill:
 Clone this repository into your `~/.mycroft/skills` directory.
 Then install the dependencies inside your mycroft virtual environment:
 

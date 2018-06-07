@@ -1,0 +1,1 @@
+(was ist|) (?P<Item>.*) (?P<RequestType>status|temperatur|Feuchtigkeit|angepassen|reguliere zu|eingestellt auf)

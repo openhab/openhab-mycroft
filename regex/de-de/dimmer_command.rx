@@ -1,0 +1,2 @@
+(setze) (?P<Item>.*) (auf) (?P<BrigthPercentage>\d*)(?: prozent)?
+(dimme|erhelle) (?P<Item>.*?)\s*(?: by )?(?P<BrigthPercentage>\d*)?(?: prozent)?$

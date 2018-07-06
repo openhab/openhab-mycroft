@@ -1,0 +1,1 @@
+(setze|schalte|bringe) (?P<Command>ein|aus) (?P<Item>.*)

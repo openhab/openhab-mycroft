@@ -51,6 +51,7 @@ If you've forgotten what items have been identified, you can ask Mycroft:
 - *"Hey Mycroft, list openhab items"*
 
 ## Versions Change Log
+* 1.3 added german translation
 * 1.2 addedd python 3 support
 * 1.1 added status request to Switchable items
 * 1.0 added support to item tagged as Thermostat, CurrentTemperature, CurrentHumidity

@@ -65,7 +65,7 @@ From 18.2.5b mycroft-core release it is possible to install the skill using the 
 
 or via the [msm](https://mycroft.ai/documentation/msm/) command:
 ```shell
-msm install openhab
+msm install https://github.com/openhab/openhab-mycroft
 ```
 
 To manually install the skill:

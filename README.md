@@ -99,7 +99,6 @@ Restart mycroft for the changes to take effect.
 
 ## Category
 **IoT**
-WARNING: You have no Categories selected. Please ensure your Skill is assigned to at least one Category.
 
 ## Tags
 #openHAB

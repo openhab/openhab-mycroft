@@ -1,28 +1,9 @@
-# openHAB skill for Mycroft
+# <img src='https://www.openhab.org/openhab-logo-square.png' card_color='#40DBB0' width='50' height='50' style='vertical-align:bottom'/> openHAB
+This skill adds openHAB support to Mycroft.
 
+## About 
 This skill adds [openHAB](http://www.openhab.org/) support to [Mycroft](https://mycroft.ai).
-The skill takes advantage of the openHAB REST API, so it works both with the v1.x and v2.x of openHAB.  
-
-Some sample voice commands are:
-
-- *"Hey Mycroft, turn on Diningroom Light"*
-- *"Hey Mycroft, switch off Kitchen Light"*
-- *"Hey Mycroft, put on Good Night"*
-- *"Hey Mycroft, what is Good Night status?"*
-- *"Hey Mycroft, set Diningroom to 50 percent"*
-- *"Hey Mycroft, dim Kitchen"*
-- *"Hey Mycroft, brighten Kitchen"*
-- *"Hey Mycroft, dim Kitchen by 20 percent"*
-- *"Hey Mycroft, what's Bedroom temperature?"*
-- *"Hey Mycroft, what's Bedroom humidity?"*
-- *"Hey Mycroft, adjust Main Thermostat to 21 degrees"*
-- *"Hey Mycroft, regulate Main Thermostat to 20 degrees"*
-- *"Hey Mycroft, decrease Main Thermostat by 2 degrees"*
-- *"Hey Mycroft, increase Main Thermostat by 1 degrees"*
-- *"Hey Mycroft, what is Main Thermostat regulated to?"*
-- *"Hey Mycroft, what is Main Thermostat tuned to?"*
-
-## openHAB Item Configuration
+The skill takes advantage of the openHAB REST API, so it works both with the v1.x and v2.x of openHAB.
 
 In order to make openHAB Items accessible to Mycroft, they need to be [tagged](https://www.openhab.org/addons/integrations/homekit/).
 Device names recognized by Mycroft are matched against openHAB Item Labels.
@@ -94,3 +75,34 @@ Add the block below to your `mycroft.conf` file:
 ```
 
 Restart mycroft for the changes to take effect.
+
+## Examples 
+* " Hey Mycroft, turn on Diningroom Light"
+* "Hey Mycroft, switch off Kitchen Light"
+* "Hey Mycroft, put on Good Night"
+* "Hey Mycroft, what is Good Night status?"
+* "Hey Mycroft, set Diningroom to 50 percent"
+* "Hey Mycroft, dim Kitchen"
+* "Hey Mycroft, brighten Kitchen"
+* "Hey Mycroft, dim Kitchen by 20 percent"
+* "Hey Mycroft, what's Bedroom temperature?"
+* "Hey Mycroft, what's Bedroom humidity?"
+* "Hey Mycroft, adjust Main Thermostat to 21 degrees"
+* "Hey Mycroft, regulate Main Thermostat to 20 degrees"
+* "Hey Mycroft, decrease Main Thermostat by 2 degrees"
+* "Hey Mycroft, increase Main Thermostat by 1 degrees"
+* "Hey Mycroft, what is Main Thermostat regulated to?"
+* "Hey Mycroft, what is Main Thermostat tuned to?"
+
+## Credits 
+@mortommy
+
+## Category
+**IoT**
+
+## Tags
+#openHAB
+#smarthome
+#IoT
+#Automation
+#opensource

@@ -27,6 +27,8 @@ import json
 # v 0.9 - added support to dimmable items
 # v 1.0 - added Thermostat tag support
 # v 1.1 - added what status Switchable tag
+# v 1.2 - support to python 3.0
+# v 1.3 - support german
 
 
 __author__ = 'mortommy'
@@ -56,7 +58,7 @@ class openHABSkill(MycroftSkill):
 
 	def initialize(self):
 	
-		supported_languages = ["en-us", "it-it"]
+		supported_languages = ["en-US", "it-IT", "de-DE"]
 		
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
@@ -68,7 +70,7 @@ class openHABSkill(MycroftSkill):
 		onoff_status_intent = IntentBuilder("OnOff_StatusIntent").require("OnOffStatusKeyword").require("Command").require("Item").build()
 		self.register_intent(onoff_status_intent, self.handle_onoff_status_intent)
 
-		dimmer_status_intent = IntentBuilder("Dimmer_StatusIntent").require("DimmerStatusKeyword").require("Item").optionally("BrigthPercentage").build()
+		dimmer_status_intent = IntentBuilder("Dimmer_StatusIntent").require("DimmerStatusKeyword").require("Item").optionally("BrightPercentage").build()
 		self.register_intent(dimmer_status_intent, self.handle_dimmer_status_intent)
 
 		what_status_intent = IntentBuilder("What_StatusIntent").require("WhatStatusKeyword").require("Item").require("RequestType").build()
@@ -194,7 +196,7 @@ class openHABSkill(MycroftSkill):
 	def handle_dimmer_status_intent(self, message):
 		command = message.data.get('DimmerStatusKeyword')
 		messageItem = message.data.get('Item')
-		brightValue = message.data.get('BrigthPercentage', None)
+		brightValue = message.data.get('BrightPercentage', None)
 
 		statusCode = 0
 		newBrightValue = 0
@@ -202,7 +204,7 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.lightingItemsDic, messageItem)
 
 		if ohItem != None:
-			if ((command == "set") or (command == "imposta")):
+			if ((command == "set") or (command == "imposta") or (command == "setze")):
 				if ((int(brightValue) < 0) or (int(brightValue) > 100)):
 					self.speak_dialog('ErrorDialog')
 				else:
@@ -218,7 +220,7 @@ class openHABSkill(MycroftSkill):
 					if(brightValue == None):
 						brightValue = "10"
 
-					if ((command == "dim") or (command == "abbassa")):
+					if ((command == "dim") or (command == "abbassa") or (command == "dimme")):
 						newBrightValue = curBright-(int(brightValue))
 					else:
 						newBrightValue = curBright+(int(brightValue))
@@ -255,20 +257,27 @@ class openHABSkill(MycroftSkill):
 		unitOfMeasure = "degree"
 		infoType = "temperature"
 		
-		if (self.lang == "it-it"):
+		if (self.lang == "it-IT"):
 			unitOfMeasure = "gradi"
 			infoType = "temperatura"
+		
+		if (self.lang == "de-DE"):
+			unitOfMeasure = "Grad"
+			infoType = "Temperatur"
 
 		self.currStatusItemsDic = dict()
 
-		if((requestType == "temperature") or (requestType == "la temperatura")):
+		if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur")):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
-		elif((requestType == "humidity")  or (requestType == "l'umidità")):
+		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
-			if (self.lang == "it-it"):
+			if (self.lang == "it-IT"):
 				unitOfMeasure = "percento"
 				infoType = "umidità"
+			if (self.lang == "de-DE"):
+				unitOfMeasure = "Prozentsatz"
+				infoType = "Feuchtigkeit"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
 		elif((requestType == "status") or (requestType == "lo stato")):
 			infoType = "status"
@@ -297,13 +306,13 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.targetTemperatureItemsDic, messageItem)
 
 		if ohItem != None:
-			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti")):
+			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "justiere") or (command == "stimme")):
 				statusCode = self.sendCommandToItem(ohItem, tempVal)
 				newTempValue = tempVal
 			else:
 				state = self.getCurrentItemStatus(ohItem)
 				if ((state != None) and (state.isdigit())):
-					if ((command == "increase") or (command == "incrementa")):
+					if ((command == "increase") or (command == "incrementa") or (command == "erhöhe")):
 						newTempValue = int(state)+(int(tempVal))
 					else:
 						newTempValue = int(state)-(int(tempVal))
@@ -315,7 +324,7 @@ class openHABSkill(MycroftSkill):
 			if statusCode == 200:
 				self.speak_dialog('ThermostatStatus', {'item': messageItem, 'temp_val': str(newTempValue)})
 			elif statusCode == 404:
-				LOGGER.error("Some issues with the command execution!. Item not found")
+				LOGGER.error("Some issues with the command execution! Item not found")
 				self.speak_dialog('ItemNotFoundError')
 			else:
 				LOGGER.error("Some issues with the command execution!")

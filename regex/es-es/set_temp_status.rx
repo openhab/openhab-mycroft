@@ -1,0 +1,2 @@
+(regula|ajusta|afina) (?P<Item>.*) (a) (?P<TempValue>\d*) (grados)
+(aumenta|disminuye) (?P<Item>.*) (en) (?P<TempValue>\d*) (grados)

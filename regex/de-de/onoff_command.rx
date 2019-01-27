@@ -1,1 +1,1 @@
-(setze|schalte|bringe) (?P<Command>ein|aus) (?P<Item>.*)
+(schalte|mache|tue) (?P<Command>on|off) (?P<Item>.*)

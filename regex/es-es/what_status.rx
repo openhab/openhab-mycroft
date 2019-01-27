@@ -1,0 +1,1 @@
+el elemento (?P<Item>.*) (qué|cuál) (?P<RequestType>estado|temperatura|humedad|ajustes) tiene

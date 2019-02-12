@@ -112,7 +112,7 @@ class openHABSkill(MycroftSkill):
 					elif ("Thermostat" in json_response[x]['tags']):
 						self.currentThermostatItemsDic.update({json_response[x]['name']: json_response[x]['label']})
 					elif ("TargetTemperature" in json_response[x]['tags']):
-						self.targetTemperatureItemsDic.update({json_response[x]['name']: ""})
+						self.targetTemperatureItemsDic.update({json_response[x]['name']: json_response[x]['label']})
 					elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
 						self.homekitHeatingCoolingModeDic.update({json_response[x]['name']: json_response[x]['label']})
 					else:

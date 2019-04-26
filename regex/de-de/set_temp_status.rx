@@ -1,2 +1,2 @@
-(reguliere|justiere|stimme) (?P<Item>.*) (auf) (?P<TempValue>\d*) (Grad)
-(erhöhe|verringere) (?P<Item>.*) (auf) (?P<TempValue>\d*) (Grad)
+(reguliere|stell|pass) (?P<Item>.*) (auf) (?P<TempValue>\d*) (Grad) (an|)
+(erhöhe|reduziere) (?P<Item>.*) (um) (?P<TempValue>\d*) (Grad)

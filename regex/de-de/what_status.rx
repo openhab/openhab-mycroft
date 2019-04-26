@@ -1,1 +1,1 @@
-(was ist|) (?P<Item>.*) (?P<RequestType>status|temperatur|Feuchtigkeit|angepassen|reguliere zu|eingestellt auf)
+(was ist|wie ist|worauf ist) (der|die|) (?P<Item>.*) (?P<RequestType>Status|Temperatur|Feuchtigkeit|eingestellt|reguliert|angepasst)

@@ -29,7 +29,6 @@ import json
 # v 1.1 - added what status Switchable tag
 # v 1.2 - support to python 3.0
 # v 1.3 - support german
-# v 1.4 - support spanish
 
 __author__ = 'mortommy'
 
@@ -204,8 +203,8 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.lightingItemsDic, messageItem)
 
 		if ohItem != None:
-			if ((command == "set") or (command == "imposta") or (command == "setz") or (command == "pone")):
-			if ((int(brightValue) < 0) or (int(brightValue) > 100)):
+			if ((command == "set") or (command == "imposta") or (command == "setze")):
+				if ((int(brightValue) < 0) or (int(brightValue) > 100)):
 					self.speak_dialog('ErrorDialog')
 				else:
 					statusCode = self.sendCommandToItem(ohItem, brightValue)
@@ -220,7 +219,7 @@ class openHABSkill(MycroftSkill):
 					if(brightValue == None):
 						brightValue = "10"
 
-					if ((command == "dim") or (command == "abbassa") or (command == "dimme") or (command == "oscurece")):
+					if ((command == "dim") or (command == "abbassa") or (command == "dimme")):
 						newBrightValue = curBright-(int(brightValue))
 					else:
 						newBrightValue = curBright+(int(brightValue))
@@ -263,47 +262,25 @@ class openHABSkill(MycroftSkill):
 		
 		if (self.lang == "de-DE"):
 			unitOfMeasure = "Grad"
-			infoType = "temperatur"
-		
-		if (self.lang == "es-ES"):
-			unitOfMeasure = "grados"
-			infoType = "temperatura"
+			infoType = "Temperatur"
 
 		self.currStatusItemsDic = dict()
 
-		if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
+		if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur")):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
-      
-		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
+		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
-      
 			if (self.lang == "it-IT"):
 				unitOfMeasure = "percento"
 				infoType = "umidità"
-        
 			if (self.lang == "de-DE"):
 				unitOfMeasure = "Prozentsatz"
 				infoType = "Feuchtigkeit"
-        
-			if (self.lang == "es-ES"):
-				unitOfMeasure = "porciento"
-				infoType = "humedad"
-        
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
-		elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
+		elif((requestType == "status") or (requestType == "lo stato")):
 			infoType = "status"
 			unitOfMeasure = ""
-      
-			if (self.lang == "it-IT"):
-				unitOfMeasure = "stato"		
-        
-			if (self.lang == "de-DE"):
-				unitOfMeasure = "Status"	
-        
-			if (self.lang == "es-ES"):
-				unitOfMeasure = "estado"
-        
 			self.currStatusItemsDic.update(self.switchableItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
@@ -328,15 +305,13 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.targetTemperatureItemsDic, messageItem)
 
 		if ohItem != None:
-			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "stell") or (command == "pass") or (command == "regula") or (command == "ajusta") or (command == "afina")):
+			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "justiere") or (command == "stimme")):
 				statusCode = self.sendCommandToItem(ohItem, tempVal)
 				newTempValue = tempVal
 			else:
 				state = self.getCurrentItemStatus(ohItem)
 				if ((state != None) and (state.isdigit())):
-
-          if ((command == "increase") or (command == "incrementa") or (command == "erhöhe") or (command == "aumenta")):
-
+					if ((command == "increase") or (command == "incrementa") or (command == "erhöhe")):
 						newTempValue = int(state)+(int(tempVal))
 					else:
 						newTempValue = int(state)-(int(tempVal))

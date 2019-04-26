@@ -4,7 +4,7 @@
 The skill allows you to connect a running Mycroft instance to your openHAB system.
 Supported natural voice commands and responses can freely be modified and extended.
 
-The skill currently supportes the English (U.S.) and English (U.K.), German, Italian and Spanish languages but new languages are easily added via configuration files.
+The skill currently supportes the English (U.S.) and English (U.K.) languages but new languages are easily added via configuration files.
 
 ## General Configuration Instructions
 

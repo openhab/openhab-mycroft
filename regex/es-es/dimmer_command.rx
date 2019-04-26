@@ -1,0 +1,2 @@
+(set) (?P<Item>.*) (to) (?P<BrightPercentage>\d*)(?: percent)?
+(oscurece|ilumina) (?P<Item>.*?)\s*(?: al )?(?P<BrightPercentage>\d*)?(?: porciento)?$

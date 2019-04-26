@@ -1,0 +1,1 @@
+(?P<Command>enciende|apaga) (?P<Item>.*)

@@ -1,0 +1,2 @@
+(regel|verander|stel) (?P<Item>.*) (op|in) (?P<TempValue>\d*) (graden) (in)?
+(verhoog|verlaag) (?P<Item>.*) (met)? (?P<TempValue>\d*) (graden)

@@ -1,0 +1,1 @@
+(draai|schakel|zet) (?P<Item>.*) (?P<Command>aan|uit)

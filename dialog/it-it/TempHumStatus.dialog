@@ -1,1 +1,1 @@
-la {{temp_hum}} di {{item}} è {{temp_hum_val}} {{units_of_measurement}}
+la {{temp_hum}} {{item}} è {{temp_hum_val}} {{units_of_measurement}}

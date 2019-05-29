@@ -1,0 +1,1 @@
+(wat is|waar is) (?P<Item>.*) (de)? (?P<RequestType>status|temperatuur|vochtigheid|in veranderd|op ingeregeld|op ingesteld)

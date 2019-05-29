@@ -1,1 +1,1 @@
-(quale è|qual'è|com'è|come è) (?P<RequestType> lo stato|la temperatura|l'umidità|messo|regolato|affinato) (?P<Item>.*) 
+(quale è|qual è) (?P<Item>.*) (?P<RequestType>stato|temperatura|umidità|adjusted to|regolato|tuned to)

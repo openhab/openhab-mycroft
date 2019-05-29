@@ -1,0 +1,2 @@
+(zet) (?P<Item>.*) (op) (?P<BrightPercentage>\d*)(?: procent)?
+(verduister|verhelder) (?P<Item>.*?)\s*(?: naar )?(?P<BrightPercentage>\d*)?(?: procent)?$

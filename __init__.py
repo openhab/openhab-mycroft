@@ -48,7 +48,7 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		self.url = "http://%s:%s/rest" % (self.config.get('host'), self.config.get('port'))
+		self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
 
 		self.command_headers = {"Content-type": "text/plain"}
 
@@ -64,10 +64,13 @@ class openHABSkill(MycroftSkill):
 
 		self.getTaggedItems()
 
+	def get_config(self, key):
+		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
+
 	def initialize(self):
-	
+
 		supported_languages = ["en-US", "it-IT", "de-DE", "es-ES"]
-		
+
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
 			self.shutdown()
@@ -261,18 +264,18 @@ class openHABSkill(MycroftSkill):
 	def	handle_what_status_intent(self, message):
 		messageItem = message.data.get('Item')
 		requestType = message.data.get('RequestType')
-		
+
 		unitOfMeasure = "degree"
 		infoType = "temperature"
-		
+
 		if (self.lang == "it-IT"):
 			unitOfMeasure = "gradi"
 			infoType = "temperatura"
-		
+
 		if (self.lang == "de-DE"):
 			unitOfMeasure = "Grad"
 			infoType = "Temperatur"
-			
+
 		if (self.lang == "es-ES"):
 			unitOfMeasure = "grados"
 			infoType = "temperatura"
@@ -298,9 +301,9 @@ class openHABSkill(MycroftSkill):
 			infoType = "status"
 			unitOfMeasure = ""
 			if (self.lang == "it-IT"):
-				unitOfMeasure = "stato"				
+				unitOfMeasure = "stato"
 			if (self.lang == "de-DE"):
-				unitOfMeasure = "Status"				
+				unitOfMeasure = "Status"
 			if (self.lang == "es-ES"):
 				unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)

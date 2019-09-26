@@ -48,7 +48,7 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		self.url = "http://%s:%s/rest" % (self.config.get('host'), self.config.get('port'))
+		self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
 
 		self.command_headers = {"Content-type": "text/plain"}
 

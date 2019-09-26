@@ -1,0 +1,12 @@
+name: openHAB
+skillMetadata:
+  sections:
+    - name: Connection
+      fields:
+        - name: host
+          label: openHAB server IP
+          type: text
+        - name: port
+          label: openHAB server port
+          type: number
+          value: 8080

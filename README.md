@@ -64,19 +64,6 @@ cd skill-openhab
 pip install -r requirements.txt
 ```
 
-### Configuration
-
-Add the block below to your `mycroft.conf` file:
-
-```json
- "openHABSkill": {
-        "host": "openHAB server ip",
-        "port": "openHAB server port"
-      }
-```
-
-Restart mycroft for the changes to take effect.
-
 ## Examples 
 * " Hey Mycroft, turn on Diningroom Light"
 * "Hey Mycroft, switch off Kitchen Light"

@@ -96,6 +96,8 @@ class openHABSkill(MycroftSkill):
 		list_items_intent = IntentBuilder("ListItemsIntent").require("ListItemsKeyword").build()
 		self.register_intent(list_items_intent, self.handle_list_items_intent)
 
+		self.settings_change_callback = self.handle_websettings_update
+
 	def getTaggedItems(self):
 		#find all the items tagged Lighting and Switchable from openHAB
 		#the labeled items are stored in dictionaries
@@ -363,6 +365,11 @@ class openHABSkill(MycroftSkill):
 		else:
 			LOGGER.error("Item not found!")
 			self.speak_dialog('ItemNotFoundError')
+
+	def handle_websettings_update(self):
+		if self.settings.get('host') is not None and self.settings.get('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		    self.getTaggedItems()
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)

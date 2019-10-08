@@ -48,7 +48,10 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		if self.settings.get('host') is not None and self.settings.get('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		else:
+		    self.url = None
 
 		self.command_headers = {"Content-type": "text/plain"}
 
@@ -62,8 +65,6 @@ class openHABSkill(MycroftSkill):
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
 
-		self.getTaggedItems()
-
 	def initialize(self):
 	
 		supported_languages = ["en-US", "it-IT", "de-DE", "es-ES"]
@@ -71,6 +72,11 @@ class openHABSkill(MycroftSkill):
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
 			self.shutdown()
+
+		if self.url is not None:
+		    self.getTaggedItems()
+		else:
+		    self.speak_dialog('GetItemsListError')
 
 		refresh_tagged_items_intent = IntentBuilder("RefreshTaggedItemsIntent").require("RefreshTaggedItemsKeyword").build()
 		self.register_intent(refresh_tagged_items_intent, self.handle_refresh_tagged_items_intent)
@@ -131,6 +137,9 @@ class openHABSkill(MycroftSkill):
 
 		except KeyError:
 					pass
+		except Exception:
+				LOGGER.error("Some issues with the command execution!")
+				self.speak_dialog('GetItemsListError')
 
 	def findItemName(self, itemDictionary, messageItem):
 

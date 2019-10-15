@@ -1,4 +1,3 @@
-name: openHAB
 skillMetadata:
   sections:
     - name: Connection
@@ -6,6 +5,7 @@ skillMetadata:
         - name: host
           label: openHAB server IP
           type: text
+          value: 127.0.0.1
         - name: port
           label: openHAB server port
           type: number

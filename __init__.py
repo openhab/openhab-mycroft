@@ -1,10 +1,17 @@
-# Copyright (c) 2010-2017 by the respective copyright holders.
 # -*- coding: iso-8859-15 -*-
 
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
-# which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
+#
+# Copyright (c) 2010-2019 Contributors to the openHAB project
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License 2.0 which is available at
+# http://www.eclipse.org/legal/epl-2.0
+#
+# SPDX-License-Identifier: EPL-2.0
+#
 
 from os.path import dirname
 
@@ -41,7 +48,10 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		self.url = "http://%s:%s/rest" % (self.config.get('host'), self.config.get('port'))
+		if self.settings.get('host') is not None and self.settings.get('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		else:
+		    self.url = None
 
 		self.command_headers = {"Content-type": "text/plain"}
 
@@ -55,15 +65,18 @@ class openHABSkill(MycroftSkill):
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
 
-		self.getTaggedItems()
-
 	def initialize(self):
 	
-		supported_languages = ["en-US", "it-IT", "de-DE"]
+		supported_languages = ["en-US", "it-IT", "de-DE", "es-ES"]
 		
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
 			self.shutdown()
+
+		if self.url is not None:
+		    self.getTaggedItems()
+		else:
+		    self.speak_dialog('GetItemsListError')
 
 		refresh_tagged_items_intent = IntentBuilder("RefreshTaggedItemsIntent").require("RefreshTaggedItemsKeyword").build()
 		self.register_intent(refresh_tagged_items_intent, self.handle_refresh_tagged_items_intent)
@@ -82,6 +95,8 @@ class openHABSkill(MycroftSkill):
 
 		list_items_intent = IntentBuilder("ListItemsIntent").require("ListItemsKeyword").build()
 		self.register_intent(list_items_intent, self.handle_list_items_intent)
+
+		self.settings_change_callback = self.handle_websettings_update
 
 	def getTaggedItems(self):
 		#find all the items tagged Lighting and Switchable from openHAB
@@ -124,6 +139,9 @@ class openHABSkill(MycroftSkill):
 
 		except KeyError:
 					pass
+		except Exception:
+				LOGGER.error("Some issues with the command execution!")
+				self.speak_dialog('GetItemsListError')
 
 	def findItemName(self, itemDictionary, messageItem):
 
@@ -347,6 +365,11 @@ class openHABSkill(MycroftSkill):
 		else:
 			LOGGER.error("Item not found!")
 			self.speak_dialog('ItemNotFoundError')
+
+	def handle_websettings_update(self):
+		if self.settings.get('host') is not None and self.settings.get('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		    self.getTaggedItems()
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)

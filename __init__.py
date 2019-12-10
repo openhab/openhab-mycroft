@@ -37,6 +37,7 @@ import json
 # v 1.2 - support to python 3.0
 # v 1.3 - support german
 # v 1.4 - support spanish
+# v 1.5 - support to 19
 
 
 __author__ = 'mortommy'
@@ -48,8 +49,8 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		if self.settings.get('host') is not None and self.settings.get('port') is not None:
-		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
+		if self.get_config('host') is not None and self.get_config('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
 		else:
 		    self.url = None
 
@@ -64,7 +65,10 @@ class openHABSkill(MycroftSkill):
 		#self.currentThermostatItemsDic = dict()
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
-
+	
+	def get_config(self, key):
+		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
+	
 	def initialize(self):
 	
 		supported_languages = ["en-US", "it-IT", "de-DE", "es-ES"]
@@ -367,9 +371,9 @@ class openHABSkill(MycroftSkill):
 			self.speak_dialog('ItemNotFoundError')
 
 	def handle_websettings_update(self):
-		if self.settings.get('host') is not None and self.settings.get('port') is not None:
-		    self.url = "http://%s:%s/rest" % (self.settings.get('host'), self.settings.get('port'))
-		    self.getTaggedItems()
+		if self.get_config('host') is not None and self.get_config('port') is not None:
+		    self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
+			self.getTaggedItems()
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)

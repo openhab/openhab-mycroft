@@ -373,7 +373,7 @@ class openHABSkill(MycroftSkill):
 	def handle_websettings_update(self):
 		if self.get_config('host') is not None and self.get_config('port') is not None:
 		    self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
-			self.getTaggedItems()
+		    self.getTaggedItems()
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)

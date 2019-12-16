@@ -280,15 +280,15 @@ class openHABSkill(MycroftSkill):
 		unitOfMeasure = "degree"
 		infoType = "temperature"
 		
-		if (self.lang == "it-IT"):
+		if (self.lang == "it-it"):
 			unitOfMeasure = "gradi"
 			infoType = "temperatura"
 		
-		if (self.lang == "de-DE"):
+		if (self.lang == "de-de"):
 			unitOfMeasure = "Grad"
 			infoType = "Temperatur"
 			
-		if (self.lang == "es-ES"):
+		if (self.lang == "es-es"):
 			unitOfMeasure = "grados"
 			infoType = "temperatura"
 
@@ -299,24 +299,24 @@ class openHABSkill(MycroftSkill):
 		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
 			unitOfMeasure = "percentage"
 			infoType = "humidity"
-			if (self.lang == "it-IT"):
+			if (self.lang == "it-it"):
 				unitOfMeasure = "percento"
 				infoType = "umidità"
-			if (self.lang == "de-DE"):
+			if (self.lang == "de-de"):
 				unitOfMeasure = "Prozentsatz"
 				infoType = "Feuchtigkeit"
-			if (self.lang == "es-ES"):
+			if (self.lang == "es-es"):
 				unitOfMeasure = "porciento"
 				infoType = "humedad"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
 		elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
 			infoType = "status"
 			unitOfMeasure = ""
-			if (self.lang == "it-IT"):
+			if (self.lang == "it-it"):
 				unitOfMeasure = "stato"				
-			if (self.lang == "de-DE"):
+			if (self.lang == "de-de"):
 				unitOfMeasure = "Status"				
-			if (self.lang == "es-ES"):
+			if (self.lang == "es-es"):
 				unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)
 		else:

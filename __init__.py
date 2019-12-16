@@ -16,7 +16,7 @@
 from os.path import dirname
 
 from adapt.intent import IntentBuilder
-from mycroft.skills.core import MycroftSkill
+from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import getLogger
 from fuzzywuzzy import fuzz
 
@@ -91,8 +91,11 @@ class openHABSkill(MycroftSkill):
 		dimmer_status_intent = IntentBuilder("Dimmer_StatusIntent").require("DimmerStatusKeyword").require("Item").optionally("BrightPercentage").build()
 		self.register_intent(dimmer_status_intent, self.handle_dimmer_status_intent)
 
-		what_status_intent = IntentBuilder("What_StatusIntent").require("WhatStatusKeyword").require("Item").require("RequestType").build()
-		self.register_intent(what_status_intent, self.handle_what_status_intent)
+		#what_status_intent = IntentBuilder("What_StatusIntent").require("WhatStatusKeyword").require("Item").require("RequestType").build()
+		#self.register_intent(what_status_intent, self.handle_what_status_intent)
+		self.register_entity_file('item.entity')
+		self.register_entity_file('requesttype.entity')
+		self.register_intent_file('what.status.intent',self.handle_what_status_intent)
 
 		setTemp_status_intent = IntentBuilder("SetTemp_StatusIntent").require("ThermostatStatusKeyword").require("Item").require("TempValue").build()
 		self.register_intent(setTemp_status_intent, self.handle_setTemp_status_intent)
@@ -274,8 +277,10 @@ class openHABSkill(MycroftSkill):
 			self.speak_dialog('ItemNotFoundError')
 
 	def	handle_what_status_intent(self, message):
-		messageItem = message.data.get('Item')
-		requestType = message.data.get('RequestType')
+		messageItem = message.data.get('item')
+		LOGGER.debug("Item: %s" % (messageItem))
+		requestType = message.data.get('requesttype')
+		LOGGER.debug("Request Type: %s" % (requestType))
 		
 		unitOfMeasure = "degree"
 		infoType = "temperature"

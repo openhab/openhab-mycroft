@@ -1,0 +1,8 @@
+(was ist|wie ist|worauf ist) (der|die|) {item} {requesttype}
+(was ist|wie ist|worauf ist) (der|die|) {requesttype} des {item}
+Sag mir (der|die|) {item} {requesttype}
+Sag mir (der|die|) {requesttype} des {item}
+Sag mir wie ist (der|die|) {item} {requesttype}
+Ich möchte wissen (der|die|) {item} {requesttype}
+Ich möchte wissen (der|die|) {requesttype} des {item}
+Ich möchte wissen wie ist (der|die|) {item} {requesttype}

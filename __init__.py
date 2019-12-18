@@ -65,14 +65,14 @@ class openHABSkill(MycroftSkill):
 		#self.currentThermostatItemsDic = dict()
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
-	
+
 	def get_config(self, key):
 		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
-	
+
 	def initialize(self):
-	
+
 		supported_languages = ["en-us", "it-it", "de-de", "es-es"]
-		
+
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
 			self.shutdown()
@@ -276,46 +276,22 @@ class openHABSkill(MycroftSkill):
 	def	handle_what_status_intent(self, message):
 		messageItem = message.data.get('Item')
 		requestType = message.data.get('RequestType')
-		
-		unitOfMeasure = "degree"
-		infoType = "temperature"
-		
-		if (self.lang == "it-it"):
-			unitOfMeasure = "gradi"
-			infoType = "temperatura"
-		
-		if (self.lang == "de-de"):
-			unitOfMeasure = "Grad"
-			infoType = "Temperatur"
-			
-		if (self.lang == "es-es"):
-			unitOfMeasure = "grados"
-			infoType = "temperatura"
+
+		unitOfMeasure = self.translate_namedvalues('unitsOfMeasure')[requestType]
 
 		self.currStatusItemsDic = dict()
 
-		if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
+		if requestType == self.translate("temperature"):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
 		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
-			unitOfMeasure = "percentage"
-			infoType = "humidity"
-			if (self.lang == "it-it"):
-				unitOfMeasure = "percento"
-				infoType = "umidità"
-			if (self.lang == "de-de"):
-				unitOfMeasure = "Prozentsatz"
-				infoType = "Feuchtigkeit"
-			if (self.lang == "es-es"):
-				unitOfMeasure = "porciento"
-				infoType = "humedad"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
 		elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
 			infoType = "status"
 			unitOfMeasure = ""
 			if (self.lang == "it-it"):
-				unitOfMeasure = "stato"				
+				unitOfMeasure = "stato"
 			if (self.lang == "de-de"):
-				unitOfMeasure = "Status"				
+				unitOfMeasure = "Status"
 			if (self.lang == "es-es"):
 				unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)

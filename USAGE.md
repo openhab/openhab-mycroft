@@ -118,8 +118,8 @@ Each item tag supports different command, here is the summary:
 |                        | put         | on, off             |
 |                        | dim         |                     |
 |                        | dim by      | value in percentage |
-|                        | brighten    |                     |
-|                        | brighten by | value in percentage |
+|                        | bright      |                     |
+|                        | bright by   | value in percentage |
 |                        |             |                     |
 | `Thermostat`           | adjust to   | values in degrees   |
 |                        | regulate to | values in degrees   |
@@ -143,7 +143,7 @@ With references to the above item definitions, here are an examples of working c
 - * "Hey Mycroft, what is the status of Good Night?"
 - * "Hey Mycroft, set Diningroom to 50 percent"
 - * "Hey Mycroft, dim Kitchen"
-- * "Hey Mycroft, brighten Kitchen"
+- * "Hey Mycroft, bright Kitchen"
 - * "Hey Mycroft, dim Kitchen by 20 percent"
 - * "Hey Mycroft, what's Bedroom temperature?"
 - * "Hey Mycroft, tell me the temperature of Bedroom"

@@ -49,15 +49,11 @@ class openHABSkill(MycroftSkill):
 	def __init__(self):
 		super(openHABSkill, self).__init__(name="openHABSkill")
 
-		if self.get_config('host') is not None and self.get_config('port') is not None:
-		    self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
-		else:
-		    self.url = None
-
 		self.command_headers = {"Content-type": "text/plain"}
 
 		self.polling_headers = {"Accept": "application/json"}
 
+		self.url = None
 		self.lightingItemsDic = dict()
 		self.switchableItemsDic = dict()
 		self.currentTempItemsDic = dict()
@@ -65,22 +61,21 @@ class openHABSkill(MycroftSkill):
 		#self.currentThermostatItemsDic = dict()
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
-	
-	def get_config(self, key):
-		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
-	
+
 	def initialize(self):
-	
+
 		supported_languages = ["en-us", "it-it", "de-de", "es-es"]
-		
+
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")
 			self.shutdown()
 
+		self.handle_websettings_update()
+		
 		if self.url is not None:
 		    self.getTaggedItems()
 		else:
-		    self.speak_dialog('GetItemsListError')
+		    self.speak_dialog('ConfigurationNeeded')
 
 		refresh_tagged_items_intent = IntentBuilder("RefreshTaggedItemsIntent").require("RefreshTaggedItemsKeyword").build()
 		self.register_intent(refresh_tagged_items_intent, self.handle_refresh_tagged_items_intent)
@@ -104,6 +99,16 @@ class openHABSkill(MycroftSkill):
 		self.register_intent(list_items_intent, self.handle_list_items_intent)
 
 		self.settings_change_callback = self.handle_websettings_update
+
+	def get_config(self, key):
+		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
+
+	def handle_websettings_update(self):
+		if self.get_config('host') is not None and self.get_config('port') is not None:
+			self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
+			self.getTaggedItems()
+		else:
+		    self.url = None
 
 	def getTaggedItems(self):
 		#find all the items tagged Lighting and Switchable from openHAB
@@ -230,7 +235,8 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.lightingItemsDic, messageItem)
 
 		if ohItem != None:
-			if ((command == "set") or (command == "imposta") or (command == "setze") or (command == "pone")):
+			#if ((command == "set") or (command == "imposta") or (command == "setze") or (command == "pone")):
+			if self.voc_match(command, 'Set'):
 				if ((int(brightValue) < 0) or (int(brightValue) > 100)):
 					self.speak_dialog('ErrorDialog')
 				else:
@@ -246,7 +252,8 @@ class openHABSkill(MycroftSkill):
 					if(brightValue == None):
 						brightValue = "10"
 
-					if ((command == "dim") or (command == "abbassa") or (command == "dimme") or (command == "oscurece")):
+					#if ((command == "dim") or (command == "abbassa") or (command == "dimme") or (command == "oscurece")):
+					if self.voc_match(command, 'Dim'):
 						newBrightValue = curBright-(int(brightValue))
 					else:
 						newBrightValue = curBright+(int(brightValue))
@@ -277,52 +284,63 @@ class openHABSkill(MycroftSkill):
 			self.speak_dialog('ItemNotFoundError')
 
 	def	handle_what_status_intent(self, message):
+
 		messageItem = message.data.get('item')
 		LOGGER.debug("Item: %s" % (messageItem))
 		requestType = message.data.get('requesttype')
 		LOGGER.debug("Request Type: %s" % (requestType))
 		
-		unitOfMeasure = "degree"
-		infoType = "temperature"
+		unitOfMeasure = translate('Degree')
+		#unitOfMeasure = "degree"
+		infoType = translate('Temperature')
+		#infoType = "temperature"		
 		
-		if (self.lang == "it-it"):
-			unitOfMeasure = "gradi"
-			infoType = "temperatura"
+		# if (self.lang == "it-it"):
+			# unitOfMeasure = "gradi"
+			# infoType = "temperatura"
 		
-		if (self.lang == "de-de"):
-			unitOfMeasure = "Grad"
-			infoType = "Temperatur"
+		# if (self.lang == "de-de"):
+			# unitOfMeasure = "Grad"
+			# infoType = "Temperatur"
 			
-		if (self.lang == "es-es"):
-			unitOfMeasure = "grados"
-			infoType = "temperatura"
+		# if (self.lang == "es-es"):
+			# unitOfMeasure = "grados"
+			# infoType = "temperatura"
 
 		self.currStatusItemsDic = dict()
 
-		if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
+		#if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
+		if self.voc_match(command, 'Temperature'):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
-		elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
-			unitOfMeasure = "percentage"
-			infoType = "humidity"
-			if (self.lang == "it-it"):
-				unitOfMeasure = "percento"
-				infoType = "umidità"
-			if (self.lang == "de-de"):
-				unitOfMeasure = "Prozentsatz"
-				infoType = "Feuchtigkeit"
-			if (self.lang == "es-es"):
-				unitOfMeasure = "porciento"
-				infoType = "humedad"
+		#elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
+		elif self.voc_match(command, 'Humidity'):
+			#unitOfMeasure = "percentage"
+			unitOfMeasure = translate('Percentage')
+			#infoType = "humidity"
+			infoType = translate('Humidity')
+			# if (self.lang == "it-it"):
+				# unitOfMeasure = "percento"
+				# infoType = "umidità"
+			# if (self.lang == "de-de"):
+				# unitOfMeasure = "Prozentsatz"
+				# infoType = "Feuchtigkeit"
+			# if (self.lang == "es-es"):
+				# unitOfMeasure = "porciento"
+				# infoType = "humedad"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
-		elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
-			infoType = "status"
+		#elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
+		elif self.voc_match(command, 'Status'):
+			#infoType = "status"
+			infoType = translate('Status')
 			unitOfMeasure = ""
-			if (self.lang == "it-it"):
-				unitOfMeasure = "stato"				
-			if (self.lang == "de-de"):
-				unitOfMeasure = "Status"				
-			if (self.lang == "es-es"):
-				unitOfMeasure = "estado"
+			# if (self.lang == "it-it"):
+				# unitOfMeasure = "stato"
+				
+			# if (self.lang == "de-de"):
+				# unitOfMeasure = "Status"				
+
+			# if (self.lang == "es-es"):
+				# unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
@@ -347,13 +365,15 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.targetTemperatureItemsDic, messageItem)
 
 		if ohItem != None:
-			if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "stell") or (command == "pass") or (command == "regula") or (command == "ajusta") or (command == "afina")):
+			#if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "stell") or (command == "pass") or (command == "regula") or (command == "ajusta") or (command == "afina")):
+			if self.voc_match(command, 'Regulate'):
 				statusCode = self.sendCommandToItem(ohItem, tempVal)
 				newTempValue = tempVal
 			else:
 				state = self.getCurrentItemStatus(ohItem)
 				if ((state != None) and (state.isdigit())):
-					if ((command == "increase") or (command == "incrementa") or (command == "erhöhe") or (command == "aumenta")):
+					#if ((command == "increase") or (command == "incrementa") or (command == "erhöhe") or (command == "aumenta")):
+					if self.voc_match(command, 'Increase'):
 						newTempValue = int(state)+(int(tempVal))
 					else:
 						newTempValue = int(state)-(int(tempVal))
@@ -374,11 +394,6 @@ class openHABSkill(MycroftSkill):
 		else:
 			LOGGER.error("Item not found!")
 			self.speak_dialog('ItemNotFoundError')
-
-	def handle_websettings_update(self):
-		if self.get_config('host') is not None and self.get_config('port') is not None:
-		    self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
-		    self.getTaggedItems()
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)

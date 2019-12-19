@@ -73,7 +73,7 @@ pip install -r requirements.txt
 * "Hey Mycroft, what is the status of Good Night?"
 * "Hey Mycroft, set Diningroom to 50 percent"
 * "Hey Mycroft, dim Kitchen"
-* "Hey Mycroft, brighten Kitchen"
+* "Hey Mycroft, bright Kitchen"
 * "Hey Mycroft, dim Kitchen by 20 percent"
 * "Hey Mycroft, what's Bedroom temperature?"
 * "Hey Mycroft, tell me the temperature of Bedroom"

@@ -1,0 +1,7 @@
+files:
+  - source: /dialog/en-us/*.*
+    translation: /dialog/%locale%
+  - source: /regex/en-us/*.*
+    translation: /regex/%locale%
+  - source: /vocab/en-us
+    translation: /vocab/%locale%

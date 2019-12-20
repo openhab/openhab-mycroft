@@ -290,9 +290,9 @@ class openHABSkill(MycroftSkill):
 		requestType = message.data.get('requesttype')
 		LOGGER.debug("Request Type: %s" % (requestType))
 		
-		unitOfMeasure = translate('Degree')
+		unitOfMeasure = self.translate('Degree')
 		#unitOfMeasure = "degree"
-		infoType = translate('Temperature')
+		infoType = self.translate('Temperature')
 		#infoType = "temperature"		
 		
 		# if (self.lang == "it-it"):
@@ -310,14 +310,14 @@ class openHABSkill(MycroftSkill):
 		self.currStatusItemsDic = dict()
 
 		#if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
-		if self.voc_match(command, 'Temperature'):
+		if self.voc_match(requestType, 'Temperature'):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
 		#elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
-		elif self.voc_match(command, 'Humidity'):
+		elif self.voc_match(requestType, 'Humidity'):
 			#unitOfMeasure = "percentage"
-			unitOfMeasure = translate('Percentage')
+			unitOfMeasure = self.translate('Percentage')
 			#infoType = "humidity"
-			infoType = translate('Humidity')
+			infoType = self.translate('Humidity')
 			# if (self.lang == "it-it"):
 				# unitOfMeasure = "percento"
 				# infoType = "umidità"
@@ -329,9 +329,9 @@ class openHABSkill(MycroftSkill):
 				# infoType = "humedad"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
 		#elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
-		elif self.voc_match(command, 'Status'):
+		elif self.voc_match(requestType, 'Status'):
 			#infoType = "status"
-			infoType = translate('Status')
+			infoType = self.translate('Status')
 			unitOfMeasure = ""
 			# if (self.lang == "it-it"):
 				# unitOfMeasure = "stato"

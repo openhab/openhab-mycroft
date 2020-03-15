@@ -38,6 +38,7 @@ import json
 # v 1.3 - support german
 # v 1.4 - support spanish
 # v 1.5 - support to 19
+# v 1.6 - added ContactSensor tag support
 
 
 __author__ = 'mortommy'
@@ -347,6 +348,7 @@ class openHABSkill(MycroftSkill):
 			# if (self.lang == "es-es"):
 				# unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)
+			self.currStatusItemsDic.update(self.contactSensorItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
 

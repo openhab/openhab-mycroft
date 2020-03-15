@@ -38,6 +38,7 @@ import json
 # v 1.3 - support german
 # v 1.4 - support spanish
 # v 1.5 - support to 19
+# v 1.6 - added ContactSensor tag support
 
 
 __author__ = 'mortommy'
@@ -61,6 +62,7 @@ class openHABSkill(MycroftSkill):
 		#self.currentThermostatItemsDic = dict()
 		self.targetTemperatureItemsDic = dict()
 		#self.homekitHeatingCoolingModeDic = dict()
+		self.contactSensorItemsDic = dict()
 
 	def initialize(self):
 
@@ -121,6 +123,7 @@ class openHABSkill(MycroftSkill):
 		self.currentThermostatItemsDic = {}
 		self.targetTemperatureItemsDic = {}
 		self.homekitHeatingCoolingModeDic = {}
+		self.contactSensorItemsDic = {}
 
 		requestUrl = self.url+"/items?recursive=false"
 
@@ -143,6 +146,8 @@ class openHABSkill(MycroftSkill):
 						self.targetTemperatureItemsDic.update({json_response[x]['name']: json_response[x]['label']})
 					elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
 						self.homekitHeatingCoolingModeDic.update({json_response[x]['name']: json_response[x]['label']})
+					elif ("ContactSensor" in json_response[x]['tags']):
+						self.contactSensorItemsDic.update({json_response[x]['name']: json_response[x]['label']})
 					else:
 						pass
 			else:
@@ -186,14 +191,15 @@ class openHABSkill(MycroftSkill):
 		msg = msg.strip() + ' ' + self.getItemsFromDict("Current Humidity", self.currentHumItemsDic) + "\n"
 		msg = msg.strip() + ' ' + self.getItemsFromDict("Thermostat", self.currentThermostatItemsDic) + "\n"
 		msg = msg.strip() + ' ' + self.getItemsFromDict("Target Temperature", self.targetTemperatureItemsDic) + "\n"
-		msg = msg.strip() + ' ' + self.getItemsFromDict("Homekit Heating and Cooling", self.homekitHeatingCoolingModeDic)
+		msg = msg.strip() + ' ' + self.getItemsFromDict("Homekit Heating and Cooling", self.homekitHeatingCoolingModeDic) + "\n"
+		msg = msg.strip() + ' ' + self.getItemsFromDict("Contact Sensor", self.contactSensorItemsDic)
 		self.speak_dialog('FoundItems', {'items': msg.strip()})
 
 	def handle_refresh_tagged_items_intent(self, message):
 		#to refresh the openHAB items labeled list we use an intent, we can ask Mycroft to make the refresh
 
 		self.getTaggedItems()
-		dictLenght = str(len(self.lightingItemsDic) + len(self.switchableItemsDic) + len(self.currentTempItemsDic) + len(self.currentHumItemsDic) + len(self.currentThermostatItemsDic) + len(self.targetTemperatureItemsDic) + len(self.homekitHeatingCoolingModeDic))
+		dictLenght = str(len(self.lightingItemsDic) + len(self.switchableItemsDic) + len(self.currentTempItemsDic) + len(self.currentHumItemsDic) + len(self.currentThermostatItemsDic) + len(self.targetTemperatureItemsDic) + len(self.homekitHeatingCoolingModeDic) + len(self.contactSensorItemsDic))
 		self.speak_dialog('RefreshTaggedItems', {'number_item': dictLenght})
 
 	def handle_onoff_status_intent(self, message):
@@ -342,6 +348,7 @@ class openHABSkill(MycroftSkill):
 			# if (self.lang == "es-es"):
 				# unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)
+			self.currStatusItemsDic.update(self.contactSensorItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
 

@@ -122,38 +122,42 @@ class openHABSkill(MycroftSkill):
 		self.targetTemperatureItemsDic = {}
 		self.homekitHeatingCoolingModeDic = {}
 
-		requestUrl = self.url+"/items?recursive=false"
+		if self.url == None:
+			LOGGER.error("Configuration needed!")
+			self.speak_dialog('ConfigurationNeeded')
+		else:			
+			requestUrl = self.url+"/items?recursive=false"
 
-		try:
-			req = requests.get(requestUrl, headers=self.polling_headers)
-			if req.status_code == 200:
-				json_response = req.json()
-				for x in range(0,len(json_response)):
-					if ("Lighting" in json_response[x]['tags']):
-						self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("Switchable" in json_response[x]['tags']):
-						self.switchableItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("CurrentTemperature" in json_response[x]['tags']):
-						self.currentTempItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("CurrentHumidity" in json_response[x]['tags']):
-						self.currentHumItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("Thermostat" in json_response[x]['tags']):
-						self.currentThermostatItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("TargetTemperature" in json_response[x]['tags']):
-						self.targetTemperatureItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-					elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
-						self.homekitHeatingCoolingModeDic.update({json_response[x]['name']: json_response[x]['label']})
-					else:
+			try: 
+				req = requests.get(requestUrl, headers=self.polling_headers)
+				if req.status_code == 200:
+					json_response = req.json()
+					for x in range(0,len(json_response)):
+						if ("Lighting" in json_response[x]['tags']):
+							self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("Switchable" in json_response[x]['tags']):
+							self.switchableItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("CurrentTemperature" in json_response[x]['tags']):
+							self.currentTempItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("CurrentHumidity" in json_response[x]['tags']):
+							self.currentHumItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("Thermostat" in json_response[x]['tags']):
+							self.currentThermostatItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("TargetTemperature" in json_response[x]['tags']):
+							self.targetTemperatureItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
+							self.homekitHeatingCoolingModeDic.update({json_response[x]['name']: json_response[x]['label']})
+						else:
+							pass
+				else:
+					LOGGER.error("Some issues with the command execution!")
+					self.speak_dialog('GetItemsListError')
+
+			except KeyError:
 						pass
-			else:
-				LOGGER.error("Some issues with the command execution!")
-				self.speak_dialog('GetItemsListError')
-
-		except KeyError:
-					pass
-		except Exception:
-				LOGGER.error("Some issues with the command execution!")
-				self.speak_dialog('GetItemsListError')
+			except Exception:
+					LOGGER.error("Some issues with the command execution!")
+					self.speak_dialog('GetItemsListError')
 
 	def findItemName(self, itemDictionary, messageItem):
 
@@ -291,56 +295,19 @@ class openHABSkill(MycroftSkill):
 		LOGGER.debug("Request Type: %s" % (requestType))
 		
 		unitOfMeasure = self.translate('Degree')
-		#unitOfMeasure = "degree"
 		infoType = self.translate('Temperature')
-		#infoType = "temperature"		
 		
-		# if (self.lang == "it-it"):
-			# unitOfMeasure = "gradi"
-			# infoType = "temperatura"
-		
-		# if (self.lang == "de-de"):
-			# unitOfMeasure = "Grad"
-			# infoType = "Temperatur"
-			
-		# if (self.lang == "es-es"):
-			# unitOfMeasure = "grados"
-			# infoType = "temperatura"
-
 		self.currStatusItemsDic = dict()
 
-		#if((requestType == "temperature") or (requestType == "la temperatura") or (requestType == "temperatur") or (requestType == "temperatura")):
 		if self.voc_match(requestType, 'Temperature'):
 			self.currStatusItemsDic.update(self.currentTempItemsDic)
-		#elif((requestType == "humidity")  or (requestType == "l'umidità") or (requestType == "Feuchtigkeit") or (requestType == "humedad")):
 		elif self.voc_match(requestType, 'Humidity'):
-			#unitOfMeasure = "percentage"
 			unitOfMeasure = self.translate('Percentage')
-			#infoType = "humidity"
 			infoType = self.translate('Humidity')
-			# if (self.lang == "it-it"):
-				# unitOfMeasure = "percento"
-				# infoType = "umidità"
-			# if (self.lang == "de-de"):
-				# unitOfMeasure = "Prozentsatz"
-				# infoType = "Feuchtigkeit"
-			# if (self.lang == "es-es"):
-				# unitOfMeasure = "porciento"
-				# infoType = "humedad"
 			self.currStatusItemsDic.update(self.currentHumItemsDic)
-		#elif((requestType == "status") or (requestType == "lo stato") or (requestType == "Status") or (requestType == "estado")):
 		elif self.voc_match(requestType, 'Status'):
-			#infoType = "status"
 			infoType = self.translate('Status')
 			unitOfMeasure = ""
-			# if (self.lang == "it-it"):
-				# unitOfMeasure = "stato"
-				
-			# if (self.lang == "de-de"):
-				# unitOfMeasure = "Status"				
-
-			# if (self.lang == "es-es"):
-				# unitOfMeasure = "estado"
 			self.currStatusItemsDic.update(self.switchableItemsDic)
 		else:
 			self.currStatusItemsDic.update(self.targetTemperatureItemsDic)
@@ -365,14 +332,12 @@ class openHABSkill(MycroftSkill):
 		ohItem = self.findItemName(self.targetTemperatureItemsDic, messageItem)
 
 		if ohItem != None:
-			#if((command == "regulate") or (command == "adjust") or (command == "tune") or (command == "regola") or (command == "aggiusta") or (command == "metti") or (command == "reguliere") or (command == "stell") or (command == "pass") or (command == "regula") or (command == "ajusta") or (command == "afina")):
 			if self.voc_match(command, 'Regulate'):
 				statusCode = self.sendCommandToItem(ohItem, tempVal)
 				newTempValue = tempVal
 			else:
 				state = self.getCurrentItemStatus(ohItem)
 				if ((state != None) and (state.isdigit())):
-					#if ((command == "increase") or (command == "incrementa") or (command == "erhöhe") or (command == "aumenta")):
 					if self.voc_match(command, 'Increase'):
 						newTempValue = int(state)+(int(tempVal))
 					else:

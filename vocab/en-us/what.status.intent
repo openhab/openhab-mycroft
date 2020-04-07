@@ -1,9 +1,9 @@
-(what's|what is) (the|) {item} {requesttype}
-(what's|what is) (the|) {requesttype} of {item}
-how (the| ) {item} is {requesttype}
-tell me (the|) {item} {requesttype}
-tell me (the|) {requesttype} of {item}
-tell me how (the|) {item} is {requesttype}
-I'd like to know {item} {requesttype}
-I'd like to know (the|) {requesttype} of {item}
-I'd like to know how (the|) {item} is {requesttype}
+(what's|what is) the {item} {requesttype}
+(what's|what is) the {requesttype} of {item}
+how the {item} is {requesttype}
+tell me the {item} {requesttype}
+tell me the {requesttype} of {item}
+tell me how the {item} is {requesttype}
+I'd like to know the {item} {requesttype}
+I'd like to know the {requesttype} of {item}
+I'd like to know how the {item} is {requesttype}

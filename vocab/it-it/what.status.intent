@@ -1,3 +1,3 @@
-(quale è|qual'è|com'è|come è) {requesttype} {item}
-vorrei sapere (quale è|qual'è|com'è|come è|) {requesttype} {item}
-dimmmi (quale è|qual'è|com'è|come è|) {requesttype} {item}
+(quale è|qual'è|com'è|come è) (la|lo|l'|) {requesttype} {item}
+vorrei sapere (quale è|qual'è|com'è|come è|) (la|lo|l'|) {requesttype} {item}
+dimmmi (quale è|qual'è|com'è|come è|) (la|lo|l'|) {requesttype} {item}

@@ -18,7 +18,7 @@ from os.path import dirname
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import getLogger
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 
 import requests
 import json
@@ -167,7 +167,7 @@ class openHABSkill(MycroftSkill):
 
 		try:
 			for itemName, itemLabel in list(itemDictionary.items()):
-				score = fuzz.ratio(messageItem, itemLabel)
+				score = fuzz.ratio(messageItem, itemLabel, score_cutoff=bestScore)
 				if score > bestScore:
 					bestScore = score
 					bestItem = itemName

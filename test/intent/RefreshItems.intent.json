@@ -1,5 +1,5 @@
 {
   "utterance": "refresh openhab items",
   "intent_type": "RefreshTaggedItemsIntent",
-  "expected_dialog": "GetItemsListError"
+  "expected_dialog": "ConfigurationNeeded"
 }

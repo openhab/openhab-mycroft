@@ -22,6 +22,9 @@ Group gThermostat "Main Thermostat" [ "gMainThermostat" ]
 Number MainThermostatCurrentTemp "Main Thermostat Current Temperature" (gMainThermostat) [ "CurrentTemperature" ]
 Number MainThermostatTargetTemperature "Main Thermostat Target Temperature" (gMainThermostat) [ "TargetTemperature" ]
 String MainThermostatHeatingCoolingMode "Main Thermostat Heating/Cooling Mode" (gMainThermostat) [ "homekit:HeatingCoolingMode" ]
+
+Rollershutter BedroomShutter "Bedroom Shutter" <rollershutter> [ "Shutter" ] {mqtt="<[mosquitto:mysensors/SI/1/1/1/0/0:state:default]"}
+
 ```
 
 If items are modified in openHAB, a refresh in Mycroft is needed by the command:
@@ -85,6 +88,7 @@ pip install -r requirements.txt
 * "Hey Mycroft, increase Main Thermostat by 1 degrees"
 * "Hey Mycroft, what is Main Thermostat is regulated to?"
 * "Hey Mycroft, how the Main Thermostat tuned to?"
+* "Hey Mycroft, close bedroom shutter"
 
 ## Credits 
 @mortommy

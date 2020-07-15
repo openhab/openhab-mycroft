@@ -1,0 +1,1 @@
+(?P<Command>öffne|schließe) (?P<Item>.*)

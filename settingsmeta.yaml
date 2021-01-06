@@ -10,3 +10,11 @@ skillMetadata:
           label: openHAB server port
           type: number
           value: 8080
+        - name: username
+          label: openHAB username (optional)
+          type: text
+          value: ""
+        - name: password
+          label: openHAB password (optional)
+          type: password
+          value: ""

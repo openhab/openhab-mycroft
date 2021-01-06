@@ -21,6 +21,7 @@ from mycroft.util.log import getLogger
 from rapidfuzz import fuzz
 
 import requests
+from requests.auth import HTTPBasicAuth
 import json
 
 # v 0.1 - just switch on and switch off a fix light
@@ -54,6 +55,7 @@ class openHABSkill(MycroftSkill):
 		self.polling_headers = {"Accept": "application/json"}
 
 		self.url = None
+		self.credentials = None
 		self.lightingItemsDic = dict()
 		self.switchableItemsDic = dict()
 		self.currentTempItemsDic = dict()
@@ -104,6 +106,8 @@ class openHABSkill(MycroftSkill):
 		return (self.settings.get(key) or self.config_core.get('openHABSkill', {}).get(key))
 
 	def handle_websettings_update(self):
+		if self.get_config('username') is not None and self.get_config('password') is not None:
+			self.credentials = HTTPBasicAuth(self.get_config('username'), self.get_config('password'))
 		if self.get_config('host') is not None and self.get_config('port') is not None:
 			self.url = "http://%s:%s/rest" % (self.get_config('host'), self.get_config('port'))
 			self.getTaggedItems()
@@ -129,7 +133,7 @@ class openHABSkill(MycroftSkill):
 			requestUrl = self.url+"/items?recursive=false"
 
 			try: 
-				req = requests.get(requestUrl, headers=self.polling_headers)
+				req = requests.get(requestUrl, headers=self.polling_headers, auth=self.credentials)
 				if req.status_code == 200:
 					json_response = req.json()
 					for x in range(0,len(json_response)):
@@ -362,13 +366,13 @@ class openHABSkill(MycroftSkill):
 
 	def sendStatusToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s/state" % (ohItem)
-		req = requests.put(requestUrl, data=command, headers=self.command_headers)
+		req = requests.put(requestUrl, data=command, headers=self.command_headers, auth=self.credentials)
 
 		return req.status_code
 
 	def sendCommandToItem(self, ohItem, command):
 		requestUrl = self.url+"/items/%s" % (ohItem)
-		req = requests.post(requestUrl, data=command, headers=self.command_headers)
+		req = requests.post(requestUrl, data=command, headers=self.command_headers, auth=self.credentials)
 
 		return req.status_code
 
@@ -377,7 +381,7 @@ class openHABSkill(MycroftSkill):
 		state = None
 
 		try:
-			req = requests.get(requestUrl, headers=self.command_headers)
+			req = requests.get(requestUrl, headers=self.command_headers, auth=self.credentials)
 
 			if req.status_code == 200:
 				state = req.text

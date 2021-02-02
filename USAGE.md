@@ -72,6 +72,8 @@ See the [Hue Emulation](https://www.openhab.org/addons/integrations/hueemulation
   Number MainThermostatCurrentTemp "Main Thermostat Current Temperature" (gMainThermostat) ["CurrentTemperature"]
   Number MainThermostatTargetTemperature "Main Thermostat Target Temperature" (gMainThermostat) ["TargetTemperature"]
   String MainThermostatHeatingCoolingMode "Main Thermostat Heating/Cooling Mode" (gMainThermostat) ["homekit:HeatingCoolingMode"]
+
+  Rollershutter BedroomShutter "Bedroom Shutter" <rollershutter> [ "Shutter" ] {mqtt="<[mosquitto:mysensors/SI/1/1/1/0/0:state:default]"}
   ```
  
 If items are modified in openHAB, a refresh in Mycroft is needed by the voice command:
@@ -128,6 +130,8 @@ Each item tag supports different command, here is the summary:
 | `CurrentHumidity`      | what's      | humidity            |
 |                        |             |                     |
 | `CurrentTemperature`   | what's      | temperature         |
+| `Shutter`              | open        |                     |
+|                        | close       |                     |
 
 With references to the above item definitions, here are an examples of working commands:
 
@@ -150,6 +154,7 @@ With references to the above item definitions, here are an examples of working c
 - * "Hey Mycroft, increase Main Thermostat by 1 degrees"
 - * "Hey Mycroft, what is Main Thermostat is regulated to?"
 - * "Hey Mycroft, how the Main Thermostat tuned to?"
+- * "Hey Mycroft, close bedroom shutter"
 
 ### Additional Comments
 

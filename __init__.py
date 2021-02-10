@@ -201,7 +201,12 @@ class openHABSkill(MycroftSkill):
 		self.speak_dialog('RefreshTaggedItems', {'number_item': dictLenght})
 
 	def handle_onoff_status_intent(self, message):
-		command = message.data.get('Command')
+		if (message.data.get('Command') == 'ein' or message.data.get('Command') == 'an'):
+			command = 'on'
+		elif message.data.get('Command') == 'aus':
+			command = 'off'
+		else:
+			command = message.data.get('Command')
 		messageItem = message.data.get('Item')
 
 		#We have to find the item to update from our dictionaries

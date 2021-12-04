@@ -1,1 +1,3 @@
-(schalte|mache|tue) (?P<Command>on|off) (?P<Item>.*)
+(schalte|mache|tue) (?P<Command>an|aus) (?P<Item>.*)
+(schalte|mache|mach) (?P<Item>.*) (?P<Command>an|aus)
+(?P<Item>.*) (?P<Command>an|aus)

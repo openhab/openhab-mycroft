@@ -64,7 +64,7 @@ class openHABSkill(MycroftSkill):
 
 	def initialize(self):
 
-		supported_languages = ["en-us", "it-it", "de-de", "es-es"]
+		supported_languages = ["en-us", "it-it", "de-de", "es-es", "hu-hu"]
 
 		if self.lang not in supported_languages:
 			self.log.warning("Unsupported language for " + self.name + ", shutting down skill.")

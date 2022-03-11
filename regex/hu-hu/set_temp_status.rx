@@ -1,0 +1,2 @@
+(állít|változtat) (?P<Item>.*) (ra) (?P<TempValue>\d*) (fok)
+(növel|csökkent) (?P<Item>.*) (kal) (?P<TempValue>\d*) (fok)

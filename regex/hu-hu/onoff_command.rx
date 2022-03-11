@@ -1,0 +1,2 @@
+(kapcsol|kapcsold) (?P<Command>on|off) (a|az) (?P<Item>.*)
+(kapcsol|kapcsold) (a|az) (?P<Item>.*) (?P<Command>on|off)

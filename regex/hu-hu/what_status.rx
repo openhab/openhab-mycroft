@@ -1,0 +1,1 @@
+(mi|mennyi|hány) (a|az)  (?P<Item>.*) (?P<RequestType>állapota|hőmérséklete|páratartalma)

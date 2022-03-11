@@ -1,0 +1,2 @@
+(állít) (?P<Item>.*)(?: ra )?(?P<BrightPercentage>\d+)(?: százalék)?
+(csökkent|növel) (?P<Item>.*?)(?: kal )?(?P<BrightPercentage>\d*)?(?: százalék)?$

@@ -133,22 +133,49 @@ class openHABSkill(MycroftSkill):
 				if req.status_code == 200:
 					json_response = req.json()
 					for x in range(0,len(json_response)):
-						if ("Lighting" in json_response[x]['tags']):
-							self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("Switchable" in json_response[x]['tags']):
-							self.switchableItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("CurrentTemperature" in json_response[x]['tags']):
-							self.currentTempItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("CurrentHumidity" in json_response[x]['tags']):
-							self.currentHumItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("Thermostat" in json_response[x]['tags']):
-							self.currentThermostatItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("TargetTemperature" in json_response[x]['tags']):
-							self.targetTemperatureItemsDic.update({json_response[x]['name']: json_response[x]['label']})
-						elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
-							self.homekitHeatingCoolingModeDic.update({json_response[x]['name']: json_response[x]['label']})
+
+						# Semantic model tags
+						if "Control" in json_response[x]['tags']:
+							if "ColorTemperature" in json_response[x]['tags']:
+								self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif "Light" in json_response[x]['tags']:
+								self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+						elif "Measurement" in json_response[x]['tags']:
+							if "Humidity" in json_response[x]['tags']:
+								self.currentHumItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
+							elif "Temperature" in json_response[x]['tags']:
+								self.currentTempItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
+						elif "Setpoint" in json_response[x]['tags']:
+							if "Temperature" in json_response[x]['tags']:
+								self.targetTemperatureItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
+						elif "Switch" in json_response[x]['tags']:
+							if "Light" in json_response[x]['tags']:
+								self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif "Power" in json_response[x]['tags']:
+								self.switchableItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
 						else:
-							pass
+							# Old tags
+							if ("Lighting" in json_response[x]['tags']):
+								self.lightingItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif ("Switchable" in json_response[x]['tags']):
+								self.switchableItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif ("CurrentTemperature" in json_response[x]['tags']):
+								self.currentTempItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif ("CurrentHumidity" in json_response[x]['tags']):
+								self.currentHumItemsDic.update({json_response[x]['name']: json_response[x]['label']})
+							elif ("Thermostat" in json_response[x]['tags']):
+								self.currentThermostatItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
+							elif ("TargetTemperature" in json_response[x]['tags']):
+								self.targetTemperatureItemsDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
+							elif ("homekit:HeatingCoolingMode" in json_response[x]['tags']):
+								self.homekitHeatingCoolingModeDic.update(
+									{json_response[x]['name']: json_response[x]['label']})
 				else:
 					LOGGER.error("Some issues with the command execution!")
 					self.speak_dialog('GetItemsListError')

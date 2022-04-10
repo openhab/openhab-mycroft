@@ -101,33 +101,33 @@ Switch Kitchen_Light_A2 "Kitchen LEDs"                    ["Lighting"] {channel=
 
 Each item tag supports different command, here is the summary:
 
-| Tag                    | Key word    | Commands            |
-|------------------------|-------------|---------------------|
-| `Switchable`           | turn        | on, off             |
-|                        | switch      | on, off             |
-|                        | put         | on, off             |
-|                        | what's      | status              |
-|                        |             |                     |
-| `Lighting`             | turn        | on, off             |
-|                        | switch      | on, off             |
-|                        | put         | on, off             |
-|                        | dim         |                     |
-|                        | dim by      | value in percentage |
-|                        | bright      |                     |
-|                        | bright by   | value in percentage |
-|                        |             |                     |
-| `Thermostat`           | adjust to   | values in degrees   |
-|                        | regulate to | values in degrees   |
-|                        | tune to     | values in degrees   |
-|                        | decrease by | values in degrees   |
-|                        | increase by | values in degrees   |
-|                        | what's      | adjusted to         |
-|                        | what's      | regulated to        |
-|                        | what's      | tuned to            |
-|                        |             |                     |
-| `CurrentHumidity`      | what's      | humidity            |
-|                        |             |                     |
-| `CurrentTemperature`   | what's      | temperature         |
+| Tag(s)                                                                                                 | Key word    | Commands            |
+|--------------------------------------------------------------------------------------------------------|-------------|---------------------|
+| `["Switchable"]` or `["Switch", "Power"]`                                                              | turn        | on, off             |
+|                                                                                                        | switch      | on, off             |
+|                                                                                                        | put         | on, off             |
+|                                                                                                        | what's      | status              |
+|                                                                                                        |             |                     |
+| `["Lighting"]` or `["Switch", "Light"]` or `["Control", "Light"]` or `["Control", "ColorTemperature"]` | turn        | on, off             |
+|                                                                                                        | switch      | on, off             |
+|                                                                                                        | put         | on, off             |
+|                                                                                                        | dim         |                     |
+|                                                                                                        | dim by      | value in percentage |
+|                                                                                                        | bright      |                     |
+|                                                                                                        | bright by   | value in percentage |
+|                                                                                                        |             |                     |
+| `["Thermostat"]` or `["Temperature", "Setpoint"]`                                                      | adjust to   | values in degrees   |
+|                                                                                                        | regulate to | values in degrees   |
+|                                                                                                        | tune to     | values in degrees   |
+|                                                                                                        | decrease by | values in degrees   |
+|                                                                                                        | increase by | values in degrees   |
+|                                                                                                        | what's      | adjusted to         |
+|                                                                                                        | what's      | regulated to        |
+|                                                                                                        | what's      | tuned to            |
+|                                                                                                        |             |                     |
+| `["CurrentHumidity"]` or `["Measurement", "Humidity"]`                                                 | what's      | humidity            |
+|                                                                                                        |             |                     |
+| `["CurrentTemperature"]` or `["Measurement", "Temperature"]`                                           | what's      | temperature         |
 
 With references to the above item definitions, here are an examples of working commands:
 
